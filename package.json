@@ -1,7 +1,12 @@
 {
   "name": "mfgames-culture-typescript",
   "version": "0.0.0",
-  "main": "dist/be/be.js",
-  "dependencies": {
+  "main": "lib/init.js",
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "^2.3.2"
+  },
+  "scripts": {
+    "test": "jasmine"
   }
 }
