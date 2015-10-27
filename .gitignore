@@ -1,0 +1,14 @@
+*~
+
+.tscache
+/.ntvs_analysis.dat
+/.ntvs_analysis.dat.tmp
+.baseDir.ts
+npm-debug.log
+
+node_modules/
+lib/
+src/*.js
+src/*.js.map
+src/*.d.ts
+typings/

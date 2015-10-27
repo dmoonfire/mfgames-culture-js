@@ -1,0 +1,33 @@
+{
+    "version": "1.5.0",
+    "compilerOptions": {
+        "declaration": true,
+        "noImplicitAny": true,
+        "noLib": false,
+        "preserveConstEnums": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "target": "es6"
+    },
+    "formatCodeOptions": {
+        "convertTabsToSpaces": true,
+        "indentSize": 4,
+        "insertSpaceAfterCommaDelimiter": true,
+        "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+        "insertSpaceAfterKeywordsInControlFlowStatements": true,
+        "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+        "insertSpaceAfterSemicolonInForStatements": true,
+        "insertSpaceBeforeAndAfterBinaryOperators": true,
+        "newLineCharacter": "\r\n",
+        "placeOpenBraceOnNewLineForControlBlocks": true,
+        "placeOpenBraceOnNewLineForFunctions": true,
+        "tabSize": 4
+    },
+    "filesGlob": [
+        "**/*.ts",
+        "!node_modules/**/*.ts"
+    ],
+    "files": [
+        "init.ts"
+    ]
+}

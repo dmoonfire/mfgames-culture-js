@@ -1,0 +1,7 @@
+{
+  "name": "mfgames-culture-typescript",
+  "version": "0.0.0",
+  "main": "dist/be/be.js",
+  "dependencies": {
+  }
+}
