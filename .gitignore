@@ -6,9 +6,13 @@
 .baseDir.ts
 npm-debug.log
 
+src/*.js
+src/*.js.map
+src/*.d.ts
 lib/*.js
 lib/*.js.map
 lib/*.d.ts
+lib/
 spec/*.js
 spec/*.js.map
 spec/*.d.ts

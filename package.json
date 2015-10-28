@@ -9,6 +9,6 @@
     "jasmine": "^2.3.2"
   },
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine lib/spec/*-spec.js"
   }
 }

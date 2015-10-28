@@ -7,7 +7,8 @@
         "preserveConstEnums": true,
         "removeComments": true,
         "sourceMap": true,
-        "target": "es6"
+        "target": "es6",
+        "outDir": "../lib"
     },
     "formatCodeOptions": {
         "convertTabsToSpaces": true,
@@ -29,6 +30,8 @@
         "!node_modules/**/*.ts"
     ],
     "files": [
-        "init.ts"
+        "init.ts",
+        "spec/environment-spec.ts",
+        "spec/gregorian-spec.ts"
     ]
 }
