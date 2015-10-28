@@ -1,0 +1,172 @@
+{
+    "cycles": [
+        {
+            "cycles": [
+                {
+                    "calculate": {
+                        "div": 100,
+                        "ref": "year"
+                    },
+                    "cycles": [
+                        {
+                            "calculate": {
+                                "mod": 10,
+                                "ref": "century"
+                            },
+                            "id": "millenniumCentury"
+                        }
+                    ],
+                    "id": "century"
+                },
+                {
+                    "calculate": {
+                        "div": 10,
+                        "ref": "year"
+                    },
+                    "cycles": [
+                        {
+                            "calculate": {
+                                "mod": 10,
+                                "ref": "decade"
+                            },
+                            "id": "centuryYear"
+                        }
+                    ],
+                    "id": "decade"
+                },
+                {
+                    "calculate": {
+                        "mod": 10,
+                        "ref": "year"
+                    },
+                    "id": "decadeYear"
+                },
+                {
+                    "calculate": {
+                        "div": 1000,
+                        "ref": "year"
+                    },
+                    "id": "millennium"
+                },
+                {
+                    "id": "yearDay",
+                    "lengths": [
+                        {
+                            "count": 1,
+                            "julian": 1
+                        }
+                    ]
+                },
+                {
+                    "id": "yearMonth",
+                    "lengths": [
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "choose": [
+                                {
+                                    "count": 1,
+                                    "julian": 29,
+                                    "mod": 400,
+                                    "ref": "year"
+                                },
+                                {
+                                    "count": 1,
+                                    "julian": 28,
+                                    "mod": 100,
+                                    "ref": "year"
+                                },
+                                {
+                                    "count": 1,
+                                    "julian": 29,
+                                    "mod": 4,
+                                    "ref": "year"
+                                },
+                                {
+                                    "count": 1,
+                                    "julian": 28,
+                                    "mod": 1,
+                                    "ref": "year"
+                                }
+                            ]
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "count": 1,
+                            "julian": 30
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "count": 1,
+                            "julian": 30
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "count": 1,
+                            "julian": 30
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        },
+                        {
+                            "count": 1,
+                            "julian": 30
+                        },
+                        {
+                            "count": 1,
+                            "julian": 31
+                        }
+                    ]
+                }
+            ],
+            "id": "year",
+            "lengths": [
+                {
+                    "count": 400,
+                    "julian": 146097
+                },
+                {
+                    "count": 1,
+                    "julian": 366,
+                    "mod": 400,
+                    "ref": "year"
+                },
+                {
+                    "count": 1,
+                    "julian": 365,
+                    "mod": 100,
+                    "ref": "year"
+                },
+                {
+                    "count": 1,
+                    "julian": 366,
+                    "mod": 4,
+                    "ref": "year"
+                },
+                {
+                    "count": 1,
+                    "julian": 365
+                }
+            ]
+        }
+    ],
+    "id": "gregorian",
+    "julian": -1721059.5,
+    "version": "0"
+}

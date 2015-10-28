@@ -29,6 +29,7 @@
         "!node_modules/**/*.ts"
     ],
     "files": [
-        "environment-spec.ts"
+        "environment-spec.ts",
+        "gregorian-spec.ts"
     ]
 }
