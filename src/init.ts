@@ -1,52 +1,145 @@
-/// <reference path="../typings/node/node.d.ts"/>
-import * as fs from "fs";
-import * as path from "path";
+export interface CalendarCalculationData {
+    div?: number;
+    ref: string;
+    mod?: number;
+}
+export interface CalendarLengthData {
+    count: number;
+    julian?: number;
+    single?: Array<CalendarLengthData>;
+    ref?: string;
+	operation?: string;
+	value?: number;
+}
+export interface CalendarCycleData {
+    id: string;
+	type: string;
+    cycles: Array<CalendarCycleData>;
+	lengths?: Array<CalendarLengthData>;
+	ref?: string;
+	value?: number;
+	operation?: string;
+}
 
-module MfGamesCulture {
-	export interface CalendarCalculationData {
-		div?: number;
-		ref: string;
-		mod?: number;
-	}
-	export interface CalendarLengthData {
-		count: number;
-		julian?: number;
-		choose?: Array<CalendarLengthData>;
-		ref?: string;
-	}
-	export interface CalendarCycleData {
-		id: string;
-		cycles: Array<CalendarCycleData>;
-		calculate?: CalendarCalculationData;
-		lengths?: Array<CalendarLengthData>;
-	}
+/**
+ * The metadata and top-level information for calendar data.
+ */
+export interface CalendarData {
+    version: number;
+    id: string;
+    julian?: number;
+    cycles?: Array<CalendarCycleData>;
+}
 
-	/**
-	 * The metadata and top-level information for calendar data.
-	 */
-	export interface CalendarData {
-		version: number;
-		id: string;
-		julian?: number;
-		cycles?: Array<CalendarCycleData>;
-	}
-
-    export class Calendar {
-        constructor(data: CalendarData) {
-            this._data = data;
-        }
-
-		private _data: CalendarData;
+export class Calendar {
+    constructor(data: CalendarData) {
+        this._data = data;
     }
 
-	export class GregorianCalendar extends MfGamesCulture.Calendar {
-		constructor() {
-			// Load the Gregorian data from the disk.
-			var filename = path.join(__dirname, "gregorian.json");
-			var data: MfGamesCulture.CalendarData = fs.readFileSync(filename).toJSON();
+    private _data: CalendarData;
 
-			// Pass the loaded data to the calendar.
-			super(data);
+    public getPoint(julianDate: number): any {
+        // If we have an offset, modify the date by it.
+        if (this._data.julian) { julianDate += this._data.julian }
+
+        // Go through each of the cycles and calculate each one. We will reset
+        // the julian date for each one since each of these cycles is calculated
+        // independently.
+        var point = {};
+
+        for (var cycle of this._data.cycles) {
+            this.calculateCycle(cycle, julianDate, point);
+        }
+
+        // Return the resulting point.
+        return point;
+    }
+
+    private calculateCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+		// Figure out what to do based on the type of the cycle.
+		switch (cycle.type)
+		{
+			case "repeat":
+				this.calculateRepeatCycle(cycle, julianDate, point);
+				break;
+
+			case "calculate":
+				this.calculateCalculateCycle(cycle, julianDate, point);
+				break;
+
+			default: throw "Cannot handle cycle type of " + cycle.type + ".";
 		}
+    }
+
+	private calculateCalculateCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+		var ref = cycle.ref;
+		var index = point[ref];
+		var value = cycle.value;
+
+		switch (cycle.operation)
+		{
+			case "mod": point[cycle.id] = index % value; break;
+			case "div": point[cycle.id] = Math.floor(index / value); break;
+		}
+	}
+
+	private calculateRepeatCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+		// Start with the zero index.
+		point[cycle.id] = 0;
+
+		// Loop through the various lengths until we encounter a length that
+		// exceeds the remaining Julian Date.
+		var next = 0;
+
+		while (julianDate > 0)
+		{
+			console.log(cycle.id, julianDate);
+			// Calculate the length of the next cycle by finding the next one.
+			var found = false;
+
+			for (var length of cycle.lengths)
+			{
+				// Calculate the length of this length. If this is less than or
+				// equal to the Julian Date, we need to keep it.
+				next = this.calculateLength(length, point);
+
+				if (next > 0 && next <= julianDate) {
+					point[cycle.id] += length.count;
+					julianDate -= next;
+					found = true;
+					break;
+				}
+			}
+
+			// If we fall through, then there is something wrong so break out.
+			if (!found) { break; }
+		}
+
+		// If we have additional cycles, we want to calculate them recursively.
+		if (cycle.cycles) {
+			for (var child of cycle.cycles) {
+				this.calculateCycle(child, julianDate, point);
+			}
+		}
+	}
+
+	private calculateLength(length: CalendarLengthData, point: any): number {
+		// If we have an operation, then we need to calculate this. If the
+		// operation doesn't match, then return 0 to skip the cycle.
+		if (length.operation)
+		{
+			var ref = length.ref;
+			var index = point[ref];
+			var value = length.value;
+
+			switch (length.operation)
+			{
+				case "mod": if (index % value != 0) { return 0; }
+				case "div": if (Math.floor(index / value) != 0) { return 0; }
+			}
+		}
+
+		// We have a valid value, so return the results.
+		return length.julian;
 	}
 }

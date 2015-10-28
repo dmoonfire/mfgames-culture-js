@@ -3,50 +3,50 @@
         {
             "cycles": [
                 {
-                    "calculate": {
-                        "div": 100,
-                        "ref": "year"
-                    },
                     "cycles": [
                         {
-                            "calculate": {
-                                "mod": 10,
-                                "ref": "century"
-                            },
+                            "type": "calculate",
+                            "operation": "mod",
+                            "ref": "century",
+                            "value": 10,
                             "id": "millenniumCentury"
                         }
                     ],
-                    "id": "century"
+                    "id": "century",
+                    "operation": "div",
+                    "ref": "year",
+                    "type": "calculate",
+                    "value": 100
                 },
                 {
-                    "calculate": {
-                        "div": 10,
-                        "ref": "year"
-                    },
                     "cycles": [
                         {
-                            "calculate": {
-                                "mod": 10,
-                                "ref": "decade"
-                            },
-                            "id": "centuryYear"
+                            "id": "centuryYear",
+                            "operation": "mod",
+                            "ref": "decade",
+                            "type": "calculate",
+                            "value": 10
                         }
                     ],
-                    "id": "decade"
+                    "id": "decade",
+                    "operation": "div",
+                    "ref": "year",
+                    "type": "calculate",
+                    "value": 10
                 },
                 {
-                    "calculate": {
-                        "mod": 10,
-                        "ref": "year"
-                    },
-                    "id": "decadeYear"
+                    "id": "decadeYear",
+                    "operation": "mod",
+                    "ref": "year",
+                    "type": "calculate",
+                    "value": 10
                 },
                 {
-                    "calculate": {
-                        "div": 1000,
-                        "ref": "year"
-                    },
-                    "id": "millennium"
+                    "id": "millennium",
+                    "operation": "div",
+                    "ref": "year",
+                    "type": "calculate",
+                    "value": 1000
                 },
                 {
                     "id": "yearDay",
@@ -55,7 +55,8 @@
                             "count": 1,
                             "julian": 1
                         }
-                    ]
+                    ],
+                    "type": "repeat"
                 },
                 {
                     "id": "yearMonth",
@@ -65,7 +66,7 @@
                             "julian": 31
                         },
                         {
-                            "choose": [
+                            "single": [
                                 {
                                     "count": 1,
                                     "julian": 29,
@@ -132,7 +133,8 @@
                             "count": 1,
                             "julian": 31
                         }
-                    ]
+                    ],
+                    "type": "sequence"
                 }
             ],
             "id": "year",
@@ -144,26 +146,30 @@
                 {
                     "count": 1,
                     "julian": 366,
-                    "mod": 400,
+                    "operation": "mod",
+                    "value": 400,
                     "ref": "year"
                 },
                 {
                     "count": 1,
                     "julian": 365,
-                    "mod": 100,
+                    "operation": "mod",
+                    "value": 100,
                     "ref": "year"
                 },
                 {
                     "count": 1,
                     "julian": 366,
-                    "mod": 4,
+                    "operation": "mod",
+                    "value": 4,
                     "ref": "year"
                 },
                 {
                     "count": 1,
                     "julian": 365
                 }
-            ]
+            ],
+            "type": "repeat"
         }
     ],
     "id": "gregorian",

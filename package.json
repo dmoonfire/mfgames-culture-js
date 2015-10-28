@@ -1,14 +1,11 @@
 {
-  "name": "mfgames-culture-typescript",
-  "version": "0.0.0",
-  "main": "lib/init.js",
-  "dependencies": {
-    "jasmine-es6": "0.0.18"
-  },
-  "devDependencies": {
-    "jasmine": "^2.3.2"
-  },
-  "scripts": {
-    "test": "jasmine lib/spec/*-spec.js"
-  }
+	"name": "mfgames-culture-typescript",
+	"version": "0.0.0",
+	"main": "lib/init.js",
+	"devDependencies": {
+		"jasmine-es6": "0.0.18"
+	},
+	"scripts": {
+		"test": "jasmine lib/spec/*-spec.js"
+	}
 }
