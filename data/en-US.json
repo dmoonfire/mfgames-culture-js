@@ -1,0 +1,48 @@
+{
+    "calendar": {
+        "formats": [
+            {
+                "elements": [
+                    {
+                        "digits": 2,
+                        "offset": 1,
+                        "ref": "yearMonth"
+                    },
+                    "/",
+                    {
+                        "digits": 2,
+                        "offset": 1,
+                        "ref": "monthDay"
+                    },
+                    "/",
+                    {
+                        "digits": 4,
+                        "ref": "year"
+                    }
+                ],
+                "id": "MM/DD/YYYY"
+            },
+            {
+                "elements": [
+                    {
+                        "digits": 2,
+                        "offset": 1,
+                        "ref": "yearMonth"
+                    },
+                    "/",
+                    {
+                        "digits": 2,
+                        "offset": 1,
+                        "ref": "monthDay"
+                    },
+                    "/",
+                    {
+                        "digits": 2,
+                        "ref": "year"
+                    }
+                ],
+                "id": "MM/DD/YY"
+            }
+        ]
+    }
+}

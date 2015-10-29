@@ -83,20 +83,20 @@
                                 {
                                     "julian": 29,
                                     "operation": "mod",
-                                    "value": 400,
-                                    "ref": "year"
+                                    "ref": "year",
+                                    "value": 400
                                 },
                                 {
                                     "julian": 28,
                                     "operation": "mod",
-                                    "value": 100,
-                                    "ref": "year"
+                                    "ref": "year",
+                                    "value": 100
                                 },
                                 {
                                     "julian": 29,
                                     "operation": "mod",
-                                    "value": 4,
-                                    "ref": "year"
+                                    "ref": "year",
+                                    "value": 4
                                 },
                                 {
                                     "julian": 28
