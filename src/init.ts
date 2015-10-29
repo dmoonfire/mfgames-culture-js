@@ -30,6 +30,24 @@ export interface CalendarData {
     julian?: number;
     cycles?: Array<CalendarCycleData>;
 }
+export interface CultureTemporalFormatData {
+	ref?: string;
+	constant?: string;
+	digits?: number;
+	offset?: number;
+}
+export interface CultureTemporalData {
+	calendars: Array<string>;
+	formats: Array<CultureTemporalFormatData>;
+}
+export interface CultureData {
+	id: string;
+	version: number;
+	temporal?: CultureTemporalData;
+}
+export interface CultureDataProvider {
+	getCalendarData(id: string): Promise<CalendarData>;
+}
 
 export class Calendar {
     constructor(data: CalendarData) {

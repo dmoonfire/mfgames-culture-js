@@ -30,9 +30,11 @@
         "!node_modules/**/*.ts"
     ],
     "files": [
-        "gregorian.ts",
         "init.ts",
+        "node-provider.ts",
         "spec/environment-spec.ts",
-        "spec/gregorian-spec.ts"
+        "spec/gregorian-spec.ts",
+        "spec/helper.ts",
+        "spec/julian-spec.ts"
     ]
 }
