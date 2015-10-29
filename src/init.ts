@@ -135,6 +135,8 @@ export class Calendar {
         // Start with the zero index.
         point[cycle.id] = 0;
 
+		//console.log("seq", cycle.id, "begin", julianDate);
+
         // Loop through the sequences until we exceed our limit.
         var found = false;
 
@@ -142,6 +144,8 @@ export class Calendar {
             // Calculate the length of this length. If this is less than or
             // equal to the Julian Date, we need to keep it and move to the next.
             var next = this.calculateLength(length, point);
+
+			//console.log("seq", cycle.id, "next", julianDate, next);
 
             if (next <= 0 || next > julianDate) { break; }
 
@@ -153,6 +157,8 @@ export class Calendar {
 			if (julianDate <= 0) { break; }
         }
 
+		//console.log("seq", cycle.id, "end", julianDate, point[cycle.id]);
+
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
@@ -162,6 +168,37 @@ export class Calendar {
     }
 
     private calculateLength(length: CalendarLengthData, point: any): number {
+		// See if we have "single", which means a choice between multiple
+		// lengths.
+		if (length.single)
+		{
+			// Loop through the single lengths until we find one that is
+			// applicable.
+			//console.log("single", "begin");
+
+			for (var single of length.single) {
+				var singleRef = single.ref;
+	            var singleIndex = point[singleRef];
+	            var singleValue = single.value;
+
+				//console.log("single", "obj", single);
+				//console.log("single", "ref", singleRef, singleValue);
+
+	            switch (single.operation) {
+	                case "mod":
+	                    if (singleIndex % singleValue != 0) { continue; }
+	                    break;
+
+	                case "div":
+	                    if (Math.floor(singleIndex / singleValue) != 0) { continue; }
+	                    break;
+	            }
+
+				//console.log("single", "found", singleRef, singleValue);
+				return single.julian;
+			}
+		}
+
         // If we have an operation, then we need to calculate this. If the
         // operation doesn't match, then return 0 to skip the cycle.
         if (length.operation) {

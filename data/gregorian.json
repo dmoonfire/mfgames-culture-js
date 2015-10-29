@@ -78,30 +78,28 @@
                             "julian": 31
                         },
                         {
+                            "count": 1,
                             "single": [
                                 {
-                                    "count": 1,
                                     "julian": 29,
-                                    "mod": 400,
+                                    "operation": "mod",
+                                    "value": 400,
                                     "ref": "year"
                                 },
                                 {
-                                    "count": 1,
                                     "julian": 28,
-                                    "mod": 100,
+                                    "operation": "mod",
+                                    "value": 100,
                                     "ref": "year"
                                 },
                                 {
-                                    "count": 1,
                                     "julian": 29,
-                                    "mod": 4,
+                                    "operation": "mod",
+                                    "value": 4,
                                     "ref": "year"
                                 },
                                 {
-                                    "count": 1,
-                                    "julian": 28,
-                                    "mod": 1,
-                                    "ref": "year"
+                                    "julian": 28
                                 }
                             ]
                         },
