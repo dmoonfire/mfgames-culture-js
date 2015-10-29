@@ -5,11 +5,11 @@
                 {
                     "cycles": [
                         {
-                            "type": "calculate",
+                            "id": "millenniumCentury",
                             "operation": "mod",
                             "ref": "century",
-                            "value": 10,
-                            "id": "millenniumCentury"
+                            "type": "calculate",
+                            "value": 10
                         }
                     ],
                     "id": "century",
@@ -59,6 +59,18 @@
                     "type": "repeat"
                 },
                 {
+                    "cycles": [
+                        {
+                            "id": "monthDay",
+                            "lengths": [
+                                {
+                                    "count": 1,
+                                    "julian": 1
+                                }
+                            ],
+                            "type": "repeat"
+                        }
+                    ],
                     "id": "yearMonth",
                     "lengths": [
                         {
@@ -147,22 +159,22 @@
                     "count": 1,
                     "julian": 366,
                     "operation": "mod",
-                    "value": 400,
-                    "ref": "year"
+                    "ref": "year",
+                    "value": 400
                 },
                 {
                     "count": 1,
                     "julian": 365,
                     "operation": "mod",
-                    "value": 100,
-                    "ref": "year"
+                    "ref": "year",
+                    "value": 100
                 },
                 {
                     "count": 1,
                     "julian": 366,
                     "operation": "mod",
-                    "value": 4,
-                    "ref": "year"
+                    "ref": "year",
+                    "value": 4
                 },
                 {
                     "count": 1,
