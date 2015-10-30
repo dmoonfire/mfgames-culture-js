@@ -26,7 +26,7 @@ export function getJulian(year: number, month: number, day: number): number {
 export function getCalendar(): Promise<Calendar> {
     return new Promise<Calendar>(
         function(resolve, error) {
-            var rootDirectory = path.join(__dirname, "..", "data");
+            var rootDirectory = path.join(__dirname, "..", "..", "data");
             var provider = new NodeFilesystemCultureDataProvider(rootDirectory);
             var dataPromise = provider.getCalendarData("gregorian");
 

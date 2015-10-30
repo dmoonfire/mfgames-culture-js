@@ -15,7 +15,7 @@ export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
 	public getCalendarData(id: string): Promise<CalendarData> {
 		var that = this;
 		return new Promise<CalendarData>(function(resolve, error) {
-			var calendarData = this.loadCalendarData(id);
+			var calendarData = that.loadCalendarData(id);
 			resolve(calendarData);
 		});
 	}
