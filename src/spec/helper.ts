@@ -35,7 +35,3 @@ export function getCalendar(): Promise<Calendar> {
             });
         });
 }
-
-export function failTest(error: any) {
-    expect(error).toBeUndefined();
-};

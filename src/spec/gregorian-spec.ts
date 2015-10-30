@@ -1,7 +1,7 @@
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 /// <reference path="./helper.ts"/>
 import { Calendar } from "../init";
-import { getJulian, getCalendar, failTest } from "./helper";
+import { getJulian, getCalendar } from "./helper";
 
 describe("gregorian calendar", function() {
     it("can get components for 2001-01-01", function(done) {
