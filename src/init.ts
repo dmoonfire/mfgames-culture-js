@@ -31,22 +31,23 @@ export interface CalendarData {
     cycles?: Array<CalendarCycleData>;
 }
 export interface CultureTemporalFormatData {
-	ref?: string;
-	constant?: string;
-	digits?: number;
-	offset?: number;
+    ref?: string;
+    constant?: string;
+    digits?: number;
+    offset?: number;
 }
 export interface CultureTemporalData {
-	calendars: Array<string>;
-	formats: Array<CultureTemporalFormatData>;
+    calendars: Array<string>;
+    formats: Array<CultureTemporalFormatData>;
 }
 export interface CultureData {
-	id: string;
-	version: number;
-	temporal?: CultureTemporalData;
+    id: string;
+    version: number;
+    temporal?: CultureTemporalData;
 }
 export interface CultureDataProvider {
-	getCalendarData(id: string): Promise<CalendarData>;
+    getCalendarData(id: string): Promise<CalendarData>;
+    getCultureData(id: string): Promise<CultureData>;
 }
 
 export class Calendar {
@@ -56,63 +57,63 @@ export class Calendar {
 
     private _data: CalendarData;
 
-    public getPoint(julianDate: number): any {
+    public getInstant(julianDate: number): any {
         // If we have an offset, modify the date by it.
         if (this._data.julian) { julianDate += this._data.julian }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
         // independently.
-        var point = {};
+        var instant = {};
 
         for (var cycle of this._data.cycles) {
-            this.calculateCycle(cycle, julianDate, point);
+            this.calculateCycle(cycle, julianDate, instant);
         }
 
-        // Return the resulting point.
-        return point;
+        // Return the resulting calendar instant.
+        return instant;
     }
 
-    private calculateCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+    private calculateCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
         // Figure out what to do based on the type of the cycle.
         switch (cycle.type) {
             case "repeat":
-                this.calculateRepeatCycle(cycle, julianDate, point);
+                this.calculateRepeatCycle(cycle, julianDate, instant);
                 break;
 
             case "calculate":
-                this.calculateCalculateCycle(cycle, julianDate, point);
+                this.calculateCalculateCycle(cycle, julianDate, instant);
                 break;
 
             case "sequence":
-                this.calculateSequenceCycle(cycle, julianDate, point);
+                this.calculateSequenceCycle(cycle, julianDate, instant);
                 break;
 
             default: throw "Cannot handle cycle type of " + cycle.type + ".";
         }
     }
 
-    private calculateCalculateCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+    private calculateCalculateCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
         var ref = cycle.ref;
-        var index = point[ref];
+        var index = instant[ref];
         var value = cycle.value;
 
         switch (cycle.operation) {
-            case "mod": point[cycle.id] = index % value; break;
-            case "div": point[cycle.id] = Math.floor(index / value); break;
+            case "mod": instant[cycle.id] = index % value; break;
+            case "div": instant[cycle.id] = Math.floor(index / value); break;
         }
 
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, point);
+                this.calculateCycle(child, julianDate, instant);
             }
         }
     }
 
-    private calculateRepeatCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+    private calculateRepeatCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
         // Start with the zero index.
-        point[cycle.id] = 0;
+        instant[cycle.id] = 0;
 
         // Loop through the various lengths until we encounter a length that
         // exceeds the remaining Julian Date.
@@ -125,12 +126,12 @@ export class Calendar {
             for (var length of cycle.lengths) {
                 // Calculate the length of this length. If this is less than or
                 // equal to the Julian Date, we need to keep it.
-                next = this.calculateLength(length, point);
+                next = this.calculateLength(length, instant);
 
                 if (next <= 0) { continue; }
 
                 if (next <= julianDate) {
-                    point[cycle.id] += length.count;
+                    instant[cycle.id] += length.count;
                     julianDate -= next;
                     found = true;
                     break;
@@ -144,16 +145,16 @@ export class Calendar {
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, point);
+                this.calculateCycle(child, julianDate, instant);
             }
         }
     }
 
-    private calculateSequenceCycle(cycle: CalendarCycleData, julianDate: number, point: any): void {
+    private calculateSequenceCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
         // Start with the zero index.
-        point[cycle.id] = 0;
+        instant[cycle.id] = 0;
 
-		//console.log("seq", cycle.id, "begin", julianDate);
+        //console.log("seq", cycle.id, "begin", julianDate);
 
         // Loop through the sequences until we exceed our limit.
         var found = false;
@@ -161,67 +162,66 @@ export class Calendar {
         for (var length of cycle.lengths) {
             // Calculate the length of this length. If this is less than or
             // equal to the Julian Date, we need to keep it and move to the next.
-            var next = this.calculateLength(length, point);
+            var next = this.calculateLength(length, instant);
 
-			//console.log("seq", cycle.id, "next", julianDate, next);
+            //console.log("seq", cycle.id, "next", julianDate, next);
 
             if (next <= 0 || next > julianDate) { break; }
 
-            // Adjust the points and move to the next.
-            point[cycle.id]++;
+            // Adjust the instant cycle index and move to the next.
+            instant[cycle.id]++;
             julianDate -= next;
 
-			// If we hit zero, we're done.
-			if (julianDate <= 0) { break; }
+            // If we hit zero, we're done.
+            if (julianDate <= 0) { break; }
         }
 
-		//console.log("seq", cycle.id, "end", julianDate, point[cycle.id]);
+        //console.log("seq", cycle.id, "end", julianDate, instant[cycle.id]);
 
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, point);
+                this.calculateCycle(child, julianDate, instant);
             }
         }
     }
 
-    private calculateLength(length: CalendarLengthData, point: any): number {
-		// See if we have "single", which means a choice between multiple
-		// lengths.
-		if (length.single)
-		{
-			// Loop through the single lengths until we find one that is
-			// applicable.
-			//console.log("single", "begin");
+    private calculateLength(length: CalendarLengthData, instant: any): number {
+        // See if we have "single", which means a choice between multiple
+        // lengths.
+        if (length.single) {
+            // Loop through the single lengths until we find one that is
+            // applicable.
+            //console.log("single", "begin");
 
-			for (var single of length.single) {
-				var singleRef = single.ref;
-	            var singleIndex = point[singleRef];
-	            var singleValue = single.value;
+            for (var single of length.single) {
+                var singleRef = single.ref;
+                var singleIndex = instant[singleRef];
+                var singleValue = single.value;
 
-				//console.log("single", "obj", single);
-				//console.log("single", "ref", singleRef, singleValue);
+                //console.log("single", "obj", single);
+                //console.log("single", "ref", singleRef, singleValue);
 
-	            switch (single.operation) {
-	                case "mod":
-	                    if (singleIndex % singleValue != 0) { continue; }
-	                    break;
+                switch (single.operation) {
+                    case "mod":
+                        if (singleIndex % singleValue != 0) { continue; }
+                        break;
 
-	                case "div":
-	                    if (Math.floor(singleIndex / singleValue) != 0) { continue; }
-	                    break;
-	            }
+                    case "div":
+                        if (Math.floor(singleIndex / singleValue) != 0) { continue; }
+                        break;
+                }
 
-				//console.log("single", "found", singleRef, singleValue);
-				return single.julian;
-			}
-		}
+                //console.log("single", "found", singleRef, singleValue);
+                return single.julian;
+            }
+        }
 
         // If we have an operation, then we need to calculate this. If the
         // operation doesn't match, then return 0 to skip the cycle.
         if (length.operation) {
             var ref = length.ref;
-            var index = point[ref];
+            var index = instant[ref];
             var value = length.value;
 
             switch (length.operation) {
@@ -237,5 +237,62 @@ export class Calendar {
 
         // We have a valid value, so return the results.
         return length.julian;
+    }
+}
+
+export class Culture {
+    constructor(data: CultureData) {
+        this._data = data;
+    }
+
+    private _data: CultureData;
+    public calendar: Calendar;
+
+    public formatInstant(instant: any, id: string): string {
+        throw "Cannot format instants";
+    }
+}
+
+export class CultureProvider {
+    constructor(dataProvider: CultureDataProvider) {
+        if (!dataProvider) {
+            throw new Error("Cannot create a CultureProvider without a data provider.")
+        }
+
+        this._dataProvider = dataProvider;
+    }
+
+    private _dataProvider: CultureDataProvider;
+
+    public getCalendarPromise(id: string): Promise<Calendar> {
+        var that = this;
+        return new Promise<Calendar>(
+            function(resolve, error) {
+                var dataPromise = that._dataProvider.getCalendarData(id);
+
+                dataPromise.then(
+                    function(data) {
+                        resolve(new Calendar(data));
+                    },
+                    function(dataError) {
+                        error(dataError);
+                    });
+            });
+    }
+
+    public getCulturePromise(id: string): Promise<Culture> {
+        var that = this;
+        return new Promise<Culture>(
+            function(resolve, error) {
+                var dataPromise = that._dataProvider.getCultureData(id);
+
+                dataPromise.then(
+                    function(data) {
+                        resolve(new Culture(data));
+                    },
+                    function(dataError) {
+                        error(dataError);
+                    });
+            });
     }
 }

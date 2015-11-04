@@ -33,6 +33,7 @@
         "init.ts",
         "node-provider.ts",
         "spec/environment-spec.ts",
+        "spec/format-gregorian-spec.ts",
         "spec/gregorian-spec.ts",
         "spec/helper.ts",
         "spec/julian-spec.ts"

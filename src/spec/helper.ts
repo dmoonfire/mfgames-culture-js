@@ -2,8 +2,13 @@
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
 /// <reference path="../../typings/julian/julian.d.ts"/>
 import * as path from "path";
-import { Calendar } from "../init";
+import { Calendar, Culture, CultureProvider } from "../init";
 import { NodeFilesystemCultureDataProvider } from "../node-provider";
+
+// Set up the basic provider used for all the tests.
+var rootDirectory = path.join(__dirname, "..", "..", "data");
+var dataProvider = new NodeFilesystemCultureDataProvider(rootDirectory);
+var provider = new CultureProvider(dataProvider);
 
 /**
  * Calculates the Julian Date Number from a given year, month, day.
@@ -24,14 +29,9 @@ export function getJulian(year: number, month: number, day: number): number {
 }
 
 export function getCalendar(): Promise<Calendar> {
-    return new Promise<Calendar>(
-        function(resolve, error) {
-            var rootDirectory = path.join(__dirname, "..", "..", "data");
-            var provider = new NodeFilesystemCultureDataProvider(rootDirectory);
-            var dataPromise = provider.getCalendarData("gregorian");
+    return provider.getCalendarPromise("gregorian");
+}
 
-            dataPromise.then(function(data) {
-                resolve(new Calendar(data));
-            });
-        });
+export function getCulture(id: string): Promise<Culture> {
+    return provider.getCulturePromise(id);
 }

@@ -2,7 +2,7 @@
 /// <reference path="./init.ts"/>
 import * as fs from "fs";
 import * as path from "path";
-import { CultureDataProvider, CalendarData } from "./init";
+import { CultureDataProvider, CalendarData, CultureData } from "./init";
 
 export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
 	constructor(rootDirectory?: string) {
@@ -20,10 +20,25 @@ export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
 		});
 	}
 
+	public getCultureData(id: string): Promise<CultureData> {
+		var that = this;
+		return new Promise<CultureData>(function(resolve, error) {
+			var cultureData = that.loadCultureData(id);
+			resolve(cultureData);
+		});
+	}
+
 	private loadCalendarData(id: string): CalendarData {
-		var filename = path.join(this.rootDirectory, "gregorian.json");
+		var filename = path.join(this.rootDirectory, id + ".json");
 		var fsData = fs.readFileSync(filename).toString();
 		var data: CalendarData = JSON.parse(fsData);
+		return data;
+	}
+
+	private loadCultureData(id: string): CultureData {
+		var filename = path.join(this.rootDirectory, id + ".json");
+		var fsData = fs.readFileSync(filename).toString();
+		var data: CultureData = JSON.parse(fsData);
 		return data;
 	}
 }
