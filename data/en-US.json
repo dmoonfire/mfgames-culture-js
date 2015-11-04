@@ -1,53 +1,71 @@
 {
     "id": "en-US",
-    "version": 0,
+    "lookups": {
+        "MMM/01": "Jan",
+        "MMM/02": "Feb",
+        "MMM/03": "Mar",
+        "MMM/04": "Apr",
+        "MMM/05": "May",
+        "MMM/06": "Jun",
+        "MMM/07": "Jul",
+        "MMM/08": "Aug",
+        "MMM/09": "Sep",
+        "MMM/10": "Oct",
+        "MMM/11": "Nov",
+        "MMM/12": "Dec"
+    },
     "temporal": {
         "calendars": [
             "gregorian"
         ],
-        "formats": [
-            {
-                "elements": [
-                    {
-                        "digits": 2,
-                        "offset": 1,
-                        "ref": "yearMonth"
-                    },
-                    { "constant": "/" },
-                    {
-                        "digits": 2,
-                        "offset": 1,
-                        "ref": "monthDay"
-                    },
-                    { "constant": "/" },
-                    {
-                        "digits": 4,
-                        "ref": "year"
-                    }
-                ],
-                "id": "MM/DD/YYYY"
-            },
-            {
-                "elements": [
-                    {
-                        "digits": 2,
-                        "offset": 1,
-                        "ref": "yearMonth"
-                    },
-                    { "constant": "/" },
-                    {
-                        "digits": 2,
-                        "offset": 1,
-                        "ref": "monthDay"
-                    },
-                    { "constant": "/" },
-                    {
-                        "digits": 2,
-                        "ref": "year"
-                    }
-                ],
-                "id": "MM/DD/YY"
-            }
-        ]
-    }
+        "formats": {
+            "MM/DD/YYYY": [
+                {
+                    "digits": 2,
+                    "offset": 1,
+                    "ref": "yearMonth"
+                },
+                {
+                    "constant": "/"
+                },
+                {
+                    "digits": 2,
+                    "offset": 1,
+                    "ref": "monthDay"
+                },
+                {
+                    "constant": "/"
+                },
+                {
+                    "digits": 4,
+                    "ref": "year"
+                }
+            ],
+            "MMM DD, YY": [
+                {
+                    "digits": 2,
+                    "lookup": true,
+                    "offset": 1,
+                    "prefix": "MMM/",
+                    "ref": "yearMonth"
+                },
+                {
+                    "constant": " "
+                },
+                {
+                    "digits": 2,
+                    "offset": 1,
+                    "ref": "monthDay"
+                },
+                {
+                    "constant": ", "
+                },
+                {
+                    "digits": 2,
+                    "ref": "decadeYear"
+                }
+            ]
+        }
+    },
+    "version": 0
 }
