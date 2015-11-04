@@ -30,8 +30,12 @@
         "!node_modules/**/*.ts"
     ],
     "files": [
+        "calendar.ts",
+        "culture.ts",
+        "data.ts",
         "init.ts",
         "node-provider.ts",
+        "provider.ts",
         "spec/environment-spec.ts",
         "spec/format-gregorian-spec.ts",
         "spec/gregorian-spec.ts",
