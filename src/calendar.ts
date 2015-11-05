@@ -24,6 +24,111 @@ export class Calendar {
         return instant;
     }
 
+    public getJulian(instant: any): number {
+        // Loop through the top-level cycles and see if any of these will work.
+        // If they do, calculate the Julian Date. At the moment, we include all
+        // of the root elements which will handle composite calendars.
+        var julian: number = -this._data.julian;
+        var working = {};
+
+        for (var cycle of this._data.cycles) {
+            var cycleJulian = this.getCycleJulian(instant, cycle, working);
+            julian += cycleJulian;
+        }
+
+        // Return the resulting julian.
+        return julian;
+    }
+
+    private getCycleJulian(instant: any, cycle: data.CalendarCycleData, working: any): number {
+        // If we don't have the index for the cycle, then skip it.
+        if (!(cycle.id in instant)) {
+            return 0;
+        }
+
+        // Figure out the type of cycle, since that will determine how we
+        // calcualte it.
+        var julian = 0;
+        var index = instant[cycle.id];
+
+        switch (cycle.type) {
+            case "repeat":
+                julian = this.getRepeatCycleJulian(instant, cycle, working);
+                break;
+            case "sequence":
+                julian = this.getSequenceCycleJulian(instant, cycle, working);
+                break;
+            default: throw new Error("Cannot process unknown cycle type: " + cycle.type + ".");
+        }
+
+        // Once we go through this, then go through the child cycles.
+        if (cycle.cycles) {
+            for (var child of cycle.cycles) {
+                julian += this.getCycleJulian(instant, child, working);
+            }
+        }
+
+        // Pull out the index and calculate the values.
+        return julian;
+    }
+
+    private getRepeatCycleJulian(instant: any, cycle: data.CalendarCycleData, working: any): number {
+        // Start with the base cycle and zero out the index of the working set.
+        var index = instant[cycle.id];
+        var julian = 0;
+        working[cycle.id] = 0;
+
+        // Loop through the types, processing each one until we run out.
+        while (working[cycle.id] <= index) {
+            // Calculate the length of the next cycle by finding the next one.
+            var found = false;
+
+            for (var length of cycle.lengths) {
+                // If this cycle would have put us over, skip it.
+                if (length.count + working[cycle.id] > index) { continue; }
+
+                // Calculate the length of this length. If this is less than or
+                // equal to the Julian Date, we need to keep it.
+                var next = this.calculateLength(length, working);
+
+                if (next <= 0) { continue; }
+
+                working[cycle.id] += length.count;
+                julian += next;
+                found = true;
+                break;
+            }
+
+            // If we fall through, then there is something wrong so break out.
+            if (!found) { break; }
+        }
+
+        // Return the resulting Julian date.
+        return julian;
+    }
+
+    private getSequenceCycleJulian(instant: any, cycle: data.CalendarCycleData, working: any): number {
+        // Start with the base cycle and zero out the index of the working set.
+        var index = instant[cycle.id];
+        var julian = 0;
+        working[cycle.id] = 0;
+
+        // Loop through the sequence lengths until we exceed our limit.
+        for (var cycleIndex = 0; cycleIndex < index; cycleIndex++) {
+            // Update the working with the current cycle.
+            working[cycle.id] = cycleIndex;
+
+            // Calculate the length of this sequence.
+            var length = cycle.lengths[cycleIndex];
+            var next = this.calculateLength(length, instant);
+
+            julian += next;
+        }
+
+        // Return the resulting Julian date.
+        return julian;
+    }
+
     private calculateCycle(cycle: data.CalendarCycleData, julianDate: number, instant: any): void {
         // Figure out what to do based on the type of the cycle.
         switch (cycle.type) {
