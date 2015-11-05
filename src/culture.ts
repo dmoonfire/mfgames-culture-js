@@ -44,11 +44,33 @@ export class Culture {
         return buffer;
     }
 
-    public parseInstant(input: string, formatId: string): any {
+    public parseInstant(input: string, formatId?: string): any {
         // If the format ID is given, we retrieve that and determine if we were
         // given a valid input.
-        if (!(formatId in this._data.temporal.formats)) {
-            throw new Error("Unknown temporal format: " + formatId + ".");
+        if (formatId) {
+            if (!(formatId in this._data.temporal.formats)) {
+                throw new Error("Unknown temporal format: " + formatId + ".");
+            }
+        } else {
+            // We have to search for the format. We do this by cycling through
+            // until we find a regex that matches.
+            var found = false;
+
+            for (var fmtId in this._data.temporal.formats) {
+                var fmt = this._data.temporal.formats[fmtId];
+                var fmtRegex = this.getRegex(fmt);
+
+                if (fmtRegex.test(input)) {
+                    formatId = fmtId;
+                    found = true;
+                    break;
+                }
+            }
+
+            // If we didn't find it, we have a problem.
+            if (!found) {
+                throw new Error("Cannot infer format from " + input + ".");
+            }
         }
 
         // Grab the format and see if this matches the input.
