@@ -34,34 +34,170 @@ export class Culture {
                     throw new Error("Cannot find cycle " + elem.ref + " in " + instant + ".");
                 }
 
-                // If we have an offset, modify to get the right value.
-                if (elem.offset) { cycleIndex += elem.offset; }
-
-                // First handle any zero-padding.
-                var value: string = cycleIndex.toString();
-
-                if (elem.digits) {
-                    while (value.length < elem.digits) {
-                        value = "0" + value;
-                    }
-                }
-
-                // If we have a prefix or suffix, add them.
-                if (elem.prefix) { value = elem.prefix + value; }
-                if (elem.suffix) { value = elem.suffix + value; }
-
-                // If we have a lookup code, then use the resulting value as
-                // a lookup.
-                if (elem.lookup) {
-                    value = this._data.lookups[value];
-                }
-
                 // Add the formatted value to the buffer.
+                var value: string = this.formatIndex(elem, cycleIndex);
                 buffer += value;
             }
         }
 
         // Return the resulting text.
         return buffer;
+    }
+
+    public parseInstant(input: string, formatId: string): any {
+        // If the format ID is given, we retrieve that and determine if we were
+        // given a valid input.
+        if (!(formatId in this._data.temporal.formats)) {
+            throw new Error("Unknown temporal format: " + formatId + ".");
+        }
+
+        // Grab the format and see if this matches the input.
+        var formatElements = this._data.temporal.formats[formatId];
+        var regex = this.getRegex(formatElements);
+        var isMatch = regex.test(input);
+
+        if (!isMatch) {
+            throw new Error("Cannot find a match for parsing the input: " + input + ".");
+        }
+
+        // Go through the elements and pull out each one.
+        var matches = input.match(regex);
+        var matchIndex = 1;
+        var instant = {};
+
+        for (var elem of formatElements) {
+            // If we have a constant, then skip it.
+            if (elem.constant) { continue; }
+
+            // Pull out the elements and reverse the value.
+            var ref = elem.parseRef ? elem.parseRef : elem.ref;
+            var value = matches[matchIndex++];
+            var cycleIndex = this.getCycleIndex(elem, value);
+
+            if (elem.parseOffset) { cycleIndex += elem.parseOffset }
+
+            instant[ref] = cycleIndex;
+        }
+
+        // This is a partial instant, so convert it to Julian and then back into
+        // a fully populated object.
+        var julian = this.calendar.getJulian(instant);
+        var populatedInstant = this.calendar.getInstant(julian);
+        return populatedInstant;
+    }
+
+    private getCycleIndex(elem: data.CultureTemporalFormatElementData, value: string): number {
+        // If we have a lookup, then figure out the code.
+        if (elem.lookup) {
+            // Loop through all possible values.
+            for (var i = 0; i < elem.maxValue; i++) {
+                var keyValue = this.formatIndex(elem, i);
+
+                if (keyValue.toLowerCase() == value.toLowerCase()) {
+                    return i;
+                }
+            }
+
+            // If we got this far, we couldn't parse it.
+            throw new Error("Cannot parse the string value " + value + " for " + elem.ref + ".");
+        }
+
+        // Remove the leading zeros and convert it to a number.
+        value = value.replace(/^0+/, "");
+        var index = parseInt(value, 10);
+
+        // If set have an offset, reverse it.
+        if (elem.offset) { index -= elem.offset; }
+
+        // Return the resulting index.
+        return index;
+    }
+
+    private getRegex(elements: Array<data.CultureTemporalFormatElementData>): RegExp {
+        // Build up a regular expression from the elements.
+        var buffer = "";
+
+        for (var element of elements) {
+            // If we have a constant, then just add it directly to the regex.
+            if (element.constant) {
+                buffer += element.constant
+                    .replace("\\", "\\\\")
+                    .replace("/", "\\/")
+                    .replace(".", "\\.");
+                continue;
+            }
+
+            // If we have a maxValue, then put a simple list.
+            if (element.lookup) {
+                // Make sure we have a maxValue.
+                if (!element.maxValue) {
+                    throw new Error("Cannot parse a lookup element without maxValue.");
+                }
+
+                // Go through the parts and build everything together.
+                var lookups = new Array<string>();
+
+                for (var i = 0; i <= element.maxValue; i++) {
+                    var value: string = this
+                        .formatIndex(element, i)
+                        .replace("\\", "\\\\")
+                        .replace("/", "\\/")
+                        .replace(".", "\\.");
+                    lookups.push(value);
+                }
+
+                // Add the regular expression.
+                buffer += "(" + lookups.join("|") + ")";
+                continue;
+            }
+
+            // If we don't have a lookup, then go with the numeric values.
+            if (!element.maxDigits) {
+                throw new Error("Cannot parse a value for " + element.ref + " without a maxDigits.");
+            }
+
+            if (!element.minDigits) {
+                throw new Error("Cannot parse a value for " + element.ref + " without a minDigits.");
+            }
+
+            // Create a regex for the numeric value.
+            if (element.minDigits === element.maxDigits) {
+                buffer += "(\\d{" + element.minDigits + "})";
+            } else {
+                buffer += "(\\d{" + element.minDigits + "," + element.maxDigits + "})";
+            }
+        }
+
+        // Return the resulting buffer.
+        buffer = "^" + buffer + "$";
+        return new RegExp(buffer, "i");
+    }
+
+    private formatIndex(elem: data.CultureTemporalFormatElementData, cycleIndex: number): string {
+        // Handle any offset, if we have one.
+        if (elem.offset) { cycleIndex += elem.offset; }
+
+        // Convert the results to a string.
+        var value = cycleIndex.toString();
+
+        // Get the zero-padding.
+        if (elem.minDigits) {
+            while (value.length < elem.minDigits) {
+                value = "0" + value;
+            }
+        }
+
+        // If we have a prefix or suffix, add them.
+        if (elem.prefix) { value = elem.prefix + value; }
+        if (elem.suffix) { value = elem.suffix + value; }
+
+        // If we have a lookup code, then use the resulting value as
+        // a lookup.
+        if (elem.lookup) {
+            value = this._data.lookups[value];
+        }
+
+        // Return the resulting value.
+        return value;
     }
 }

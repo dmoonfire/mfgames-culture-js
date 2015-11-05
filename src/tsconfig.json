@@ -40,6 +40,7 @@
         "spec/format-gregorian-spec.ts",
         "spec/gregorian-spec.ts",
         "spec/helper.ts",
+        "spec/julian-en-US-spec.ts",
         "spec/julian-gregorian-spec.ts",
         "spec/julian-spec.ts"
     ]

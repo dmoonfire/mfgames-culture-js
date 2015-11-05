@@ -21,7 +21,9 @@
         "formats": {
             "MM/DD/YYYY": [
                 {
-                    "digits": 2,
+                    "maxValue": 11,
+                    "minDigits": 2,
+                    "maxDigits": 2,
                     "offset": 1,
                     "ref": "yearMonth"
                 },
@@ -29,7 +31,8 @@
                     "constant": "/"
                 },
                 {
-                    "digits": 2,
+                    "minDigits": 2,
+                    "maxDigits": 2,
                     "offset": 1,
                     "ref": "monthDay"
                 },
@@ -37,14 +40,16 @@
                     "constant": "/"
                 },
                 {
-                    "digits": 4,
+                    "minDigits": 4,
+                    "maxDigits": 4,
                     "ref": "year"
                 }
             ],
             "MMM DD, YY": [
                 {
-                    "digits": 2,
                     "lookup": true,
+                    "maxValue": 11,
+                    "minDigits": 2,
                     "offset": 1,
                     "prefix": "MMM/",
                     "ref": "yearMonth"
@@ -53,7 +58,8 @@
                     "constant": " "
                 },
                 {
-                    "digits": 2,
+                    "minDigits": 2,
+                    "maxDigits": 2,
                     "offset": 1,
                     "ref": "monthDay"
                 },
@@ -61,8 +67,11 @@
                     "constant": ", "
                 },
                 {
-                    "digits": 2,
-                    "ref": "decadeYear"
+                    "minDigits": 2,
+                    "maxDigits": 2,
+                    "ref": "decadeYear",
+                    "parseRef": "year",
+                    "parseOffset": 2000
                 }
             ]
         }

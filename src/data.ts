@@ -33,11 +33,16 @@ export interface CalendarData {
 export interface CultureTemporalFormatElementData {
     ref?: string;
     constant?: string;
-    digits?: number;
+    minDigits?: number;
+    maxDigits?: number,
     offset?: number;
     prefix?: string;
     suffix?: string;
     lookup?: boolean;
+    maxValue?: number,
+    minValue?: number,
+    parseRef?: string,
+    parseOffset?: number
 }
 export interface CultureTemporalData {
     calendars: Array<string>;
