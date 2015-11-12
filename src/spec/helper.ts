@@ -6,7 +6,7 @@ import { Calendar, Culture, CultureProvider } from "../init";
 import { NodeFilesystemCultureDataProvider } from "../node-provider";
 
 // Set up the basic provider used for all the tests.
-var rootDirectory = path.join(__dirname, "..", "..", "data");
+var rootDirectory = path.join(__dirname, "..", "..", "node_modules", "mfgames-culture-data");
 var dataProvider = new NodeFilesystemCultureDataProvider(rootDirectory);
 var provider = new CultureProvider(dataProvider);
 
@@ -29,7 +29,7 @@ export function getJulian(year: number, month: number, day: number): number {
 }
 
 export function getCalendar(): Promise<Calendar> {
-    return provider.getCalendarPromise("gregorian");
+    return provider.getCalendarPromise("calendars/gregorian");
 }
 
 export function getCulture(id: string): Promise<Culture> {

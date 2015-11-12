@@ -1,9 +1,10 @@
 {
-  "name": "mfgames-culture-typescript",
+  "name": "mfgames-culture-es6",
   "version": "0.0.0",
   "main": "lib/init.js",
   "devDependencies": {
     "jasmine-es6": "0.0.18",
+    "mfgames-culture-data": "^0.0.0",
     "mocha": "^2.3.3"
   },
   "scripts": {
