@@ -9,10 +9,10 @@ npm-debug.log
 src/*.js
 src/*.js.map
 src/*.d.ts
-lib/*.js
-lib/*.js.map
-lib/*.d.ts
 lib/
+es6/
+amd/
+commonjs/
 spec/*.js
 spec/*.js.map
 spec/*.d.ts
