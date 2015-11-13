@@ -12,7 +12,7 @@
     "mocha": "^2.3.3"
   },
   "scripts": {
-    "test": "jasmine lib/spec/*-spec.js",
+    "test": "jasmine es6/spec/*-spec.js",
     "build:amd": "babel --plugins transform-es2015-modules-amd -d amd es6",
     "build:commonjs": "babel --plugins transform-es2015-modules-commonjs -d commonjs es6",
     "build": "npm run build:amd && npm run build:commonjs"

@@ -4,6 +4,26 @@ import { Calendar, Culture } from "../init";
 import { getJulian, getCalendar, getCulture } from "./helper";
 
 describe("get instant from gregorian text", function() {
+    it("julian 01/01/2000", function(done) {
+        getCulture("cultures/en-US").then(
+            function(culture: Culture) {
+                try {
+                    var julian = getJulian(2000, 1, 1);
+                    var instant = culture.parseInstant("" + julian);
+                    var calendar = culture.calendar;
+                    var expected = calendar.getInstant(julian);
+                    expect(instant).toEqual(expected);
+                } catch (exception) {
+                    fail(exception);
+                } finally {
+                    done();
+                }
+            },
+            function(error) {
+                fail(error);
+            });
+    });
+
     it("01/01/2000", function(done) {
         getCulture("cultures/en-US").then(
             function(culture: Culture) {

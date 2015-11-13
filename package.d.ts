@@ -15,13 +15,10 @@ declare module "mfgames-culture" {
     }
     export class Culture {
         constructor(data: CultureData);
-        private _data;
         calendar: Calendar;
+        getTemporalFormats(): Array<string>;
         formatInstant(instant: any, formatId: string): string;
         parseInstant(input: string, formatId?: string): any;
-        private getCycleIndex(elem, value);
-        private getRegex(elements);
-        private formatIndex(elem, cycleIndex);
     }
     export interface CalendarCalculationData {
         div?: number;

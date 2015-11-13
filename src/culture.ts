@@ -10,6 +10,19 @@ export class Culture {
     private _data: data.CultureData;
     public calendar: Calendar;
 
+    public getTemporalFormats(): Array<string> {
+        var formats = new Array<string>();
+
+        if (this._data.temporal) {
+            var formatData = this._data.temporal.formats;
+
+            for (var format in formatData) {
+                formats.push(format);
+            }
+        }
+
+        return formats;
+    }
     public formatInstant(instant: any, formatId: string): string {
         // First make sure this is a known format for this culture.
         var elements = this._data.temporal.formats[formatId];
@@ -67,6 +80,13 @@ export class Culture {
                 }
             }
 
+            // If we didn't find it, see if this could be a JDN.
+            if (!found && this.isNumeric(input)) {
+                var julian = parseFloat(input);
+                var populatedInstant = this.calendar.getInstant(julian);
+                return populatedInstant;
+            }
+
             // If we didn't find it, we have a problem.
             if (!found) {
                 throw new Error("Cannot infer format from " + input + ".");
@@ -106,6 +126,11 @@ export class Culture {
         var julian = this.calendar.getJulian(instant);
         var populatedInstant = this.calendar.getInstant(julian);
         return populatedInstant;
+    }
+
+    private isNumeric(input: string) {
+        var n = parseFloat(input);
+        return !isNaN(n) && isFinite(n);
     }
 
     private getCycleIndex(elem: data.CultureTemporalFormatElementData, value: string): number {
