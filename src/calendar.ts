@@ -8,14 +8,15 @@ export class Calendar {
     private _data: data.CalendarData;
 
     public getInstant(julianDate: number): any {
+        // Set up the default instant.
+        var instant = {julian: julianDate};
+
         // If we have an offset, modify the date by it.
         if (this._data.julian) { julianDate += this._data.julian }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
         // independently.
-        var instant = {};
-
         for (var cycle of this._data.cycles) {
             this.calculateCycle(cycle, julianDate, instant);
         }
