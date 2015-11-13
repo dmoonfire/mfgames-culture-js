@@ -22,14 +22,13 @@ export interface CalendarCycleData {
 }
 
 /**
- * The metadata and top-level information for calendar data.
+ * Base class for all top-level culture components.
  */
-export interface CalendarData {
-    version: number;
+export interface ComponentData {
     id: string;
-    julian?: number;
-    cycles?: Array<CalendarCycleData>;
+    version: number;
 }
+
 export interface CultureTemporalFormatElementData {
     ref?: string;
     constant?: string;
@@ -48,9 +47,15 @@ export interface CultureTemporalData {
     calendars: Array<string>;
     formats: { [id: string]: Array<CultureTemporalFormatElementData> };
 }
-export interface CultureData {
-    id: string;
-    version: number;
+/**
+ * The metadata and top-level information for calendar data.
+ */
+export interface CalendarData extends ComponentData {
+    julian?: number;
+    cycles?: Array<CalendarCycleData>;
+}
+
+export interface CultureData extends ComponentData {
     temporal?: CultureTemporalData;
     lookups: { [id: string]: string };
 }

@@ -74,3 +74,37 @@ export class CultureProvider {
             });
     }
 }
+
+export class ArrayCultureDataProvider implements data.CultureDataProvider {
+	constructor(components: Array<data.ComponentData>) {
+        this.components = components;
+	}
+
+	private components: Array<data.ComponentData>;
+
+	public getCalendarData(id: string): Promise<data.CalendarData> {
+		var that = this;
+		return new Promise<data.CalendarData>(function(resolve, error) {
+            var calendarData: data.CalendarData = that.getComponent(id);
+			resolve(calendarData);
+		});
+	}
+
+	public getCultureData(id: string): Promise<data.CultureData> {
+		var that = this;
+		return new Promise<data.CultureData>(function(resolve, error) {
+            var cultureData: data.CultureData = that.getComponent(id);
+			resolve(cultureData);
+		});
+	}
+
+    private getComponent(id: string): any {
+        for (var component of this.components) {
+            if (component.id === id) {
+                return component;
+            }
+        }
+
+        throw new Error("Cannot find component ID: " + component + ".");
+    }
+}
