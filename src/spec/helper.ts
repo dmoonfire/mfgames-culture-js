@@ -1,6 +1,5 @@
 /// <reference path="../../typings/node/node.d.ts"/>
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../typings/julian/julian.d.ts"/>
 import * as path from "path";
 import { Calendar, Culture, CultureProvider } from "../init";
 import { NodeFilesystemCultureDataProvider } from "../node-provider";

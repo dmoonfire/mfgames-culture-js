@@ -9,11 +9,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2001, 1, 1);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2451910.5,
                 year: 2001,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 0,
@@ -29,11 +31,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2001, 1, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2451911.5,
                 year: 2001,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 1,
@@ -49,11 +53,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2001, 2, 1);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2451941.5,
                 year: 2001,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 31,
@@ -69,11 +75,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2001, 2, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2451942.5,
                 year: 2001,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 32,
@@ -89,11 +97,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2001, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2451970.5,
                 year: 2001,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 60,
@@ -109,11 +119,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2002, 2, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2452307.5,
                 year: 2002,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 2,
                 decadeYear: 2,
                 millennium: 2,
                 yearDay: 32,
@@ -129,11 +141,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2002, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2452335.5,
                 year: 2002,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 2,
                 decadeYear: 2,
                 millennium: 2,
                 yearDay: 60,
@@ -149,11 +163,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2003, 2, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2452672.5,
                 year: 2003,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 3,
                 decadeYear: 3,
                 millennium: 2,
                 yearDay: 32,
@@ -169,11 +185,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2003, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2452700.5,
                 year: 2003,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 3,
                 decadeYear: 3,
                 millennium: 2,
                 yearDay: 60,
@@ -189,11 +207,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2004, 2, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2453037.5,
                 year: 2004,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 4,
                 decadeYear: 4,
                 millennium: 2,
                 yearDay: 32,
@@ -209,11 +229,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2004, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2453066.5,
                 year: 2004,
                 century: 20,
                 millenniumCentury: 0,
                 decade: 200,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 4,
                 decadeYear: 4,
                 millennium: 2,
                 yearDay: 61,
@@ -229,10 +251,12 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2100, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2488129.5,
                 year: 2100,
                 century: 21,
                 millenniumCentury: 1,
                 decade: 210,
+                centuryDecade: 0,
                 centuryYear: 0,
                 decadeYear: 0,
                 millennium: 2,
@@ -249,11 +273,13 @@ describe("gregorian calendar", function() {
             var julian = getJulian(2101, 3, 2);
             var point = cal.getInstant(julian);
             expect(point).toEqual({
+                julian: 2488494.5,
                 year: 2101,
                 century: 21,
                 millenniumCentury: 1,
                 decade: 210,
-                centuryYear: 0,
+                centuryDecade: 0,
+                centuryYear: 1,
                 decadeYear: 1,
                 millennium: 2,
                 yearDay: 60,

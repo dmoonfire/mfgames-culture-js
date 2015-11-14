@@ -13,11 +13,12 @@
   },
   "scripts": {
     "test": "jasmine es6/spec/*-spec.js",
-    "build:amd": "babel --plugins transform-es2015-modules-amd -d amd es6",
-    "build:commonjs": "babel --plugins transform-es2015-modules-commonjs -d commonjs es6",
+    "build:amd": "babel --presets es2015 --plugins transform-es2015-modules-amd -d amd es6",
+    "build:commonjs": "babel --presets es2015 --plugins transform-es2015-modules-commonjs -d commonjs es6",
     "build": "npm run build:amd && npm run build:commonjs"
   },
   "dependencies": {
     "babel-core": "^6.1.4"
-  }
+  },
+  "typings": "./package.d.ts"
 }
