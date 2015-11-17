@@ -27,6 +27,7 @@ export interface CalendarCycleData {
 export interface ComponentData {
     id: string;
     version: number;
+    type: string;
 }
 
 export interface CultureTemporalFormatElementData {
@@ -45,7 +46,7 @@ export interface CultureTemporalFormatElementData {
 }
 export interface CultureTemporalData {
     calendars: Array<string>;
-    formats: { [id: string]: Array<CultureTemporalFormatElementData> };
+    instantFormats: { [id: string]: Array<CultureTemporalFormatElementData> };
 }
 /**
  * The metadata and top-level information for calendar
@@ -373,7 +374,7 @@ export class Culture {
         var formats = new Array<string>();
 
         if (this._data.temporal) {
-            var formatData = this._data.temporal.formats;
+            var formatData = this._data.temporal.instantFormats;
 
             for (var format in formatData) {
                 formats.push(format);
@@ -384,7 +385,7 @@ export class Culture {
     }
     public formatInstant(instant: any, formatId: string): string {
         // First make sure this is a known format for this culture.
-        var elements = this._data.temporal.formats[formatId];
+        var elements = this._data.temporal.instantFormats[formatId];
         if (!elements) { throw new Error("Unknown format ID: " + formatId + "."); }
 
         // We have the format, so build up a string that contents the elements.
@@ -420,7 +421,7 @@ export class Culture {
         // If the format ID is given, we retrieve that and determine if we were
         // given a valid input.
         if (formatId) {
-            if (!(formatId in this._data.temporal.formats)) {
+            if (!(formatId in this._data.temporal.instantFormats)) {
                 throw new Error("Unknown temporal format: " + formatId + ".");
             }
         } else {
@@ -428,8 +429,8 @@ export class Culture {
             // until we find a regex that matches.
             var found = false;
 
-            for (var fmtId in this._data.temporal.formats) {
-                var fmt = this._data.temporal.formats[fmtId];
+            for (var fmtId in this._data.temporal.instantFormats) {
+                var fmt = this._data.temporal.instantFormats[fmtId];
                 var fmtRegex = this.getRegex(fmt);
 
                 if (fmtRegex.test(input)) {
@@ -453,7 +454,7 @@ export class Culture {
         }
 
         // Grab the format and see if this matches the input.
-        var formatElements = this._data.temporal.formats[formatId];
+        var formatElements = this._data.temporal.instantFormats[formatId];
         var regex = this.getRegex(formatElements);
         var isMatch = regex.test(input);
 

@@ -28,7 +28,7 @@ export function getJulian(year: number, month: number, day: number): number {
 }
 
 export function getCalendar(id: string): Promise<Calendar> {
-    return provider.getCalendarPromise("calendars/gregorian");
+    return provider.getCalendarPromise(id);
 }
 
 export function getCulture(id: string): Promise<Culture> {
