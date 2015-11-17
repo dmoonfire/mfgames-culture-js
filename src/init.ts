@@ -54,6 +54,7 @@ export interface CultureTemporalData {
 export interface CalendarData extends ComponentData {
     julian?: number;
     cycles?: Array<CalendarCycleData>;
+    partialDaysOnly?: boolean;
 }
 
 export interface CultureData extends ComponentData {
@@ -78,6 +79,9 @@ export class Calendar {
 
         // If we have an offset, modify the date by it.
         if (this._data.julian) { julianDate += this._data.julian }
+
+        // Check to see if we are only dealing with days.
+        if (this._data.partialDaysOnly) { julianDate -= Math.floor(julianDate); }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
