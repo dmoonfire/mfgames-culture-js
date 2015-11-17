@@ -20,7 +20,8 @@ describe("get instant from gregorian text", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -39,7 +40,8 @@ describe("get instant from gregorian text", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -58,7 +60,8 @@ describe("get instant from gregorian text", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -77,7 +80,8 @@ describe("get instant from gregorian text", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -96,7 +100,8 @@ describe("get instant from gregorian text", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 });

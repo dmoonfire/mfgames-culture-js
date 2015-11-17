@@ -75,7 +75,7 @@ export class Calendar {
 
     public getInstant(julianDate: number): any {
         // Set up the default instant.
-        var instant = {julian: julianDate};
+        var instant = { julian: julianDate };
 
         // If we have an offset, modify the date by it.
         if (this._data.julian) { julianDate += this._data.julian }
@@ -672,12 +672,13 @@ export class CultureProvider {
                                 else if (promises.length == 1) {
                                     culture.calendar = promises[0];
                                 }
-                                else { throw new Error("Cannot assign multiple calendars."); }
+                                else {
+                                    error("Cannot assign multiple calendars.");
+                                }
 
                                 // Resolve the culture.
                                 resolve(culture);
-                            }
-                            )
+                            });
                     },
                     function(dataError) {
                         error(dataError);
@@ -687,27 +688,27 @@ export class CultureProvider {
 }
 
 export class ArrayCultureDataProvider implements CultureDataProvider {
-	constructor(components: Array<ComponentData>) {
+    constructor(components: Array<ComponentData>) {
         this.components = components;
-	}
+    }
 
-	private components: Array<ComponentData>;
+    private components: Array<ComponentData>;
 
-	public getCalendarData(id: string): Promise<CalendarData> {
-		var that = this;
-		return new Promise<CalendarData>(function(resolve, error) {
+    public getCalendarData(id: string): Promise<CalendarData> {
+        var that = this;
+        return new Promise<CalendarData>(function(resolve, error) {
             var calendarData: CalendarData = that.getComponent(id);
-			resolve(calendarData);
-		});
-	}
+            resolve(calendarData);
+        });
+    }
 
-	public getCultureData(id: string): Promise<CultureData> {
-		var that = this;
-		return new Promise<CultureData>(function(resolve, error) {
+    public getCultureData(id: string): Promise<CultureData> {
+        var that = this;
+        return new Promise<CultureData>(function(resolve, error) {
             var cultureData: CultureData = that.getComponent(id);
-			resolve(cultureData);
-		});
-	}
+            resolve(cultureData);
+        });
+    }
 
     private getComponent(id: string): any {
         for (var component of this.components) {

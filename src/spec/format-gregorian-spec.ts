@@ -13,12 +13,15 @@ describe("gregorian format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "INVALID");
                     fail("Incorrectly formatted a date as INVALID.")
+                } catch (err) {
+                    // No handling since we are testing it blowing up.
                 } finally {
                     done();
                 }
             },
             function(error) {
-                fail("There was an error while running");
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -33,14 +36,15 @@ describe("gregorian format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MM/DD/YYYY");
                     expect(formattedInstant).toEqual("01/01/2001");
-                } catch(err) {
+                } catch (err) {
                     fail(err);
                 } finally {
                     done();
                 }
             },
             function(error) {
-                fail("There was an error while running");
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -55,14 +59,15 @@ describe("gregorian format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MMM DD, YY");
                     expect(formattedInstant).toEqual("Jan 01, 01");
-                } catch(err) {
+                } catch (err) {
                     fail(err);
                 } finally {
                     done();
                 }
             },
             function(error) {
-                fail("There was an error while running");
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 });

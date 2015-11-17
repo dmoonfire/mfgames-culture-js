@@ -19,7 +19,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -38,7 +39,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -57,7 +59,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -76,7 +79,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -95,7 +99,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -114,7 +119,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -133,7 +139,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -152,7 +159,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 
@@ -171,7 +179,8 @@ describe("calculate julian from gregorian", function() {
                 }
             },
             function(error) {
-                fail(error);
+                fail("There was an error while running: " + error);
+                done();
             });
     });
 });
