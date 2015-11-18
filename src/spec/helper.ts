@@ -12,12 +12,20 @@ var provider = new CultureProvider(dataProvider);
 /**
  * Calculates the Julian Date Number from a given year, month, day.
  */
-export function getJulian(year: number, month: number, day: number): number {
+export function getJulian(
+    year: number,
+    month: number,
+    day: number,
+    hour: number = 0,
+    minute: number = 0,
+    second: number = 0)
+    : number {
     // Figure out the data using the formula from Wikipedia.
     var a = Math.floor((14 - month) / 12);
     var y = year + 4800 - a;
     var m = month + 12 * a - 3;
-    var jdn = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+    var t = hour / 24 + minute / 24 / 60 + second / 24 / 60 / 60;
+    var jdn = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045 + t;
     return jdn - 0.5;
 
     //// This was the original answer, but it is wrong.

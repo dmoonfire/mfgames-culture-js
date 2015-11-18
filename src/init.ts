@@ -387,6 +387,7 @@ export class Culture {
 
         return formats;
     }
+
     public formatInstant(instant: any, formatId: string): string {
         // First make sure this is a known format for this culture.
         var elements = this._data.temporal.instantFormats[formatId];
@@ -590,7 +591,6 @@ export class Culture {
 
         // Convert the results to a string.
         var value = cycleIndex.toString();
-
         // Get the zero-padding.
         if (elem.minDigits) {
             while (value.length < elem.minDigits) {
