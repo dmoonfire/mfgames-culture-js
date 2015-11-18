@@ -19,6 +19,7 @@ export interface CalendarCycleData {
     ref?: string;
     value?: number;
     operation?: string;
+    partialDaysOnly?: boolean;
 }
 
 /**
@@ -54,7 +55,6 @@ export interface CultureTemporalData {
 export interface CalendarData extends ComponentData {
     julian?: number;
     cycles?: Array<CalendarCycleData>;
-    partialDaysOnly?: boolean;
 }
 
 export interface CultureData extends ComponentData {
@@ -68,25 +68,22 @@ export interface CultureDataProvider {
 
 export class Calendar {
     constructor(data: CalendarData) {
-        this._data = data;
+        this.data = data;
     }
 
-    private _data: CalendarData;
+    public data: CalendarData;
 
     public getInstant(julianDate: number): any {
         // Set up the default instant.
         var instant = { julian: julianDate };
 
         // If we have an offset, modify the date by it.
-        if (this._data.julian) { julianDate += this._data.julian }
-
-        // Check to see if we are only dealing with days.
-        if (this._data.partialDaysOnly) { julianDate -= Math.floor(julianDate); }
+        if (this.data.julian) { julianDate += this.data.julian }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
         // independently.
-        for (var cycle of this._data.cycles) {
+        for (var cycle of this.data.cycles) {
             this.calculateCycle(cycle, julianDate, instant);
         }
 
@@ -98,10 +95,10 @@ export class Calendar {
         // Loop through the top-level cycles and see if any of these will work.
         // If they do, calculate the Julian Date. At the moment, we include all
         // of the root elements which will handle composite calendars.
-        var julian: number = -this._data.julian;
+        var julian: number = -this.data.julian;
         var working = {};
 
-        for (var cycle of this._data.cycles) {
+        for (var cycle of this.data.cycles) {
             var cycleJulian = this.getCycleJulian(instant, cycle, working);
             julian += cycleJulian;
         }
@@ -200,6 +197,9 @@ export class Calendar {
     }
 
     private calculateCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
+        // Check to see if we are only dealing with days.
+        if (cycle.partialDaysOnly) { julianDate -= Math.floor(julianDate); }
+
         // Figure out what to do based on the type of the cycle.
         switch (cycle.type) {
             case "repeat":
@@ -670,10 +670,13 @@ export class CultureProvider {
                                 // If we have no promises, nothing to worry about.
                                 if (promises.length == 0) { }
                                 else if (promises.length == 1) {
+                                    // If we have a single calendar, just use it.
                                     culture.calendar = promises[0];
                                 }
                                 else {
-                                    error("Cannot assign multiple calendars.");
+                                    // If we have multiple, then combine everything
+                                    // into a single one and then add that.
+                                    culture.calendar = that.combineCalendars(promises);
                                 }
 
                                 // Resolve the culture.
@@ -684,6 +687,23 @@ export class CultureProvider {
                         error(dataError);
                     });
             });
+    }
+
+    private combineCalendars(calendars: Array<Calendar>): Calendar {
+        // Use the first calendar and combine the results into it.
+        var calendar = calendars[0];
+        calendar.data.id = "composite";
+
+        for (var index = 1; index < calendars.length; index++) {
+            var childCalendar = calendars[index];
+
+            for (var cycle of childCalendar.data.cycles) {
+                calendar.data.cycles.push(cycle);
+            }
+        }
+
+        // Return the resulting calendar.
+        return calendar;
     }
 }
 
