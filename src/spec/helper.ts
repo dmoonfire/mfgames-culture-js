@@ -1,9 +1,47 @@
 /// <reference path="../../typings/node/node.d.ts"/>
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="../../node_modules/mfgames-culture-node/package.d.ts"/>
 import * as path from "path";
-import { Calendar, Culture, CultureProvider } from "../init";
-import { NodeFilesystemCultureDataProvider } from "mfgames-culture-node";
+import * as fs from "fs";
+import { Calendar, CalendarData, CultureData, CultureDataProvider, Culture, CultureProvider } from "../init";
+
+export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
+	constructor(rootDirectory?: string) {
+		if (!rootDirectory) { rootDirectory == __dirname; }
+		this.rootDirectory = rootDirectory;
+	}
+
+	private rootDirectory: string;
+
+	public getCalendarData(id: string): Promise<CalendarData> {
+		var that = this;
+		return new Promise<CalendarData>(function(resolve, error) {
+			var calendarData = that.loadCalendarData(id);
+			resolve(calendarData);
+		});
+	}
+
+	public getCultureData(id: string): Promise<CultureData> {
+		var that = this;
+		return new Promise<CultureData>(function(resolve, error) {
+			var cultureData = that.loadCultureData(id);
+			resolve(cultureData);
+		});
+	}
+
+	private loadCalendarData(id: string): CalendarData {
+		var filename = path.join(this.rootDirectory, id + ".json");
+		var fsData = fs.readFileSync(filename).toString();
+		var data: CalendarData = JSON.parse(fsData);
+		return data;
+	}
+
+	private loadCultureData(id: string): CultureData {
+		var filename = path.join(this.rootDirectory, id + ".json");
+		var fsData = fs.readFileSync(filename).toString();
+		var data: CultureData = JSON.parse(fsData);
+		return data;
+	}
+}
 
 // Set up the basic provider used for all the tests.
 var rootDirectory = path.join(__dirname, "..", "..", "node_modules", "mfgames-culture-data");
