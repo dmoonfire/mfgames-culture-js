@@ -1,8 +1,9 @@
 /// <reference path="../../typings/node/node.d.ts"/>
 /// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+/// <reference path="../../node_modules/mfgames-culture-node/package.d.ts"/>
 import * as path from "path";
 import { Calendar, Culture, CultureProvider } from "../init";
-import { NodeFilesystemCultureDataProvider } from "../node-provider";
+import { NodeFilesystemCultureDataProvider } from "mfgames-culture-node";
 
 // Set up the basic provider used for all the tests.
 var rootDirectory = path.join(__dirname, "..", "..", "node_modules", "mfgames-culture-data");
@@ -33,6 +34,16 @@ export function getJulian(
     //var time = date.getTime();
     //var jd = (time / 86400000) + 2440587.5 - 31;
     //return jd;
+}
+
+export function getJulianTime(
+    hour: number = 0,
+    minute: number = 0,
+    second: number = 0)
+    : number {
+    // Figure out the data using the formula from Wikipedia.
+    var t = hour / 24 + minute / 24 / 60 + second / 24 / 60 / 60;
+    return t - 0.5;
 }
 
 export function getCalendar(id: string): Promise<Calendar> {

@@ -34,6 +34,7 @@ export interface ComponentData {
 export interface CultureTemporalFormatElementData {
     ref?: string;
     constant?: string;
+    default?: any;
     minDigits?: number;
     maxDigits?: number,
     offset?: number;
@@ -74,6 +75,9 @@ export class Calendar {
     public data: CalendarData;
 
     public getInstant(julianDate: number): any {
+        // Normalize the Julian to seven digits.
+        julianDate = Number(julianDate.toFixed(8));
+
         // Set up the default instant.
         var instant = { julian: julianDate };
 
@@ -476,6 +480,16 @@ export class Culture {
             // If we have a constant, then skip it.
             if (elem.constant) { continue; }
 
+            // If we have a default, then set the cycles.
+            if (elem.default) {
+                for (var key in elem.default) {
+                    console.log("aa", key, elem.default[key]);
+                    instant[key] = elem.default[key];
+                }
+
+                continue;
+            }
+
             // Pull out the elements and reverse the value.
             var ref = elem.parseRef ? elem.parseRef : elem.ref;
             var value = matches[matchIndex++];
@@ -536,6 +550,11 @@ export class Culture {
                     .replace("\\", "\\\\")
                     .replace("/", "\\/")
                     .replace(".", "\\.");
+                continue;
+            }
+
+            // If we have defaults, just skip them.
+            if (element.default) {
                 continue;
             }
 
@@ -601,6 +620,7 @@ export class Culture {
         // If we have a prefix or suffix, add them.
         if (elem.prefix) { value = elem.prefix + value; }
         if (elem.suffix) { value = elem.suffix + value; }
+
 
         // If we have a lookup code, then use the resulting value as
         // a lookup.
@@ -697,8 +717,10 @@ export class CultureProvider {
         for (var index = 1; index < calendars.length; index++) {
             var childCalendar = calendars[index];
 
-            for (var cycle of childCalendar.data.cycles) {
-                calendar.data.cycles.push(cycle);
+            if (childCalendar.data.cycles) {
+                for (var cycle of childCalendar.data.cycles) {
+                    calendar.data.cycles.push(cycle);
+                }
             }
         }
 
