@@ -36,9 +36,9 @@
 		"mocha": "^2.3.3",
 		"typescript": "^1.6.2"
 	},
-	"typings": "./index.d.ts",
 	"dependencies":
 	{
 		"es6-promise": "^3.0.2"
-	}
+	},
+	"typings": "./index.d.ts"
 }
