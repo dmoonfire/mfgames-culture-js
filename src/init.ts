@@ -1,3 +1,4 @@
+/// <reference path="../typings/es6-promise/es6-promise.d.ts"/>
 export interface CalendarCalculationData {
     div?: number;
     ref: string;

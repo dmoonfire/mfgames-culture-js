@@ -12,6 +12,9 @@ src/*.d.ts
 lib/
 es6/
 amd/
+umd/
+dist/
+lib/
 commonjs/
 spec/*.js
 spec/*.js.map

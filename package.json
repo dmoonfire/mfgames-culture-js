@@ -3,22 +3,17 @@
   "version": "0.0.0",
   "main": "lib/init.js",
   "devDependencies": {
-    "babel-cli": "^6.1.4",
-    "babel-plugin-transform-es2015-modules-amd": "^6.1.4",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.4",
-    "babel-preset-es2015": "^6.1.4",
-    "jasmine-es6": "0.0.18",
+    "jasmine": "0.0.18",
     "mfgames-culture-data": "^0.0.0",
     "mocha": "^2.3.3"
   },
   "scripts": {
-    "test": "jasmine es6/spec/*-spec.js",
-    "build:amd": "babel --presets es2015 --plugins transform-es2015-modules-amd -d amd es6",
-    "build:commonjs": "babel --presets es2015 --plugins transform-es2015-modules-commonjs -d commonjs es6",
+    "test": "jasmine lib/spec/*-spec.js",
     "build": "npm run build:amd && npm run build:commonjs"
   },
   "dependencies": {
-    "babel-core": "^6.1.4"
+    "babel-core": "^6.1.4",
+    "typescript": "^1.6.2"
   },
-  "typings": "./package.d.ts"
+  "typings": "./index.d.ts"
 }
