@@ -16,7 +16,7 @@
 		"pretest": "npm run build",
 		"test": "jasmine-node lib/spec/*-spec.js",
 		"prebuild": "npm run lint",
-		"build": "tsc -p src"
+		"build": "cd src && tsc"
 	},
 	"main": "lib/init.js",
 	"homepage": "https://mfgames.com/mfgames-culture",

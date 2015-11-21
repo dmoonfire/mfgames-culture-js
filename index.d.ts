@@ -1,4 +1,4 @@
-declare module "mfgames-culture" {
+declare module "mfgames-culture-js" {
     export class Calendar {
         constructor(data: CalendarData);
         private _data;
