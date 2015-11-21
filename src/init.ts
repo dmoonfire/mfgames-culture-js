@@ -1,4 +1,6 @@
 /// <reference path="../typings/es6-promise/es6-promise.d.ts"/>
+import { Promise } from "es6-promise";
+
 export interface CalendarCalculationData {
     div?: number;
     ref: string;
@@ -37,15 +39,15 @@ export interface CultureTemporalFormatElementData {
     constant?: string;
     default?: any;
     minDigits?: number;
-    maxDigits?: number,
+    maxDigits?: number;
     offset?: number;
     prefix?: string;
     suffix?: string;
     lookup?: boolean;
-    maxValue?: number,
-    minValue?: number,
-    parseRef?: string,
-    parseOffset?: number
+    maxValue?: number;
+    minValue?: number;
+    parseRef?: string;
+    parseOffset?: number;
 }
 export interface CultureTemporalData {
     calendars: Array<string>;
@@ -83,7 +85,7 @@ export class Calendar {
         var instant = { julian: julianDate };
 
         // If we have an offset, modify the date by it.
-        if (this.data.julian) { julianDate += this.data.julian }
+        if (this.data.julian) { julianDate += this.data.julian; }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
@@ -372,7 +374,7 @@ export class Calendar {
 
 export class Culture {
     constructor(data: CultureData) {
-        if (!data) { throw new Error("Cannot create a culture without ") }
+        if (!data) { throw new Error("Cannot create a culture without "); }
         this._data = data;
     }
 
@@ -496,7 +498,7 @@ export class Culture {
             var value = matches[matchIndex++];
             var cycleIndex = this.getCycleIndex(elem, value);
 
-            if (elem.parseOffset) { cycleIndex += elem.parseOffset }
+            if (elem.parseOffset) { cycleIndex += elem.parseOffset; }
 
             instant[ref] = cycleIndex;
         }
@@ -637,7 +639,7 @@ export class Culture {
 export class CultureProvider {
     constructor(dataProvider: CultureDataProvider) {
         if (!dataProvider) {
-            throw new Error("Cannot create a CultureProvider without a data provider.")
+            throw new Error("Cannot create a CultureProvider without a data provider.");
         }
 
         this._dataProvider = dataProvider;
@@ -689,12 +691,11 @@ export class CultureProvider {
                         allCalendarPromises.then(
                             function(promises) {
                                 // If we have no promises, nothing to worry about.
-                                if (promises.length == 0) { }
-                                else if (promises.length == 1) {
+                                if (promises.length == 1) {
                                     // If we have a single calendar, just use it.
                                     culture.calendar = promises[0];
                                 }
-                                else {
+                                else if (promises.length > 1) {
                                     // If we have multiple, then combine everything
                                     // into a single one and then add that.
                                     culture.calendar = that.combineCalendars(promises);
