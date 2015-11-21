@@ -1,5 +1,5 @@
 {
-	"name": "mfgames-culture-javascript",
+	"name": "mfgames-culture-js",
 	"version": "0.0.0",
 	"description": "A library for handling arbitrary cultures and calendars for fantasy and sci-fi.",
 	"license": "MIT",
@@ -23,11 +23,11 @@
 	"repository":
 	{
 		"type": "git",
-		"url": "https://github.com/dmoonfire/mfgames-culture-javascript"
+		"url": "https://github.com/dmoonfire/mfgames-culture-js"
 	},
 	"bugs":
 	{
-		"url": "https://github.com/dmoonfire/mfgames-culture-javascript/issues"
+		"url": "https://github.com/dmoonfire/mfgames-culture-js/issues"
 	},
 	"devDependencies":
 	{
