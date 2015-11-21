@@ -1,19 +1,38 @@
 {
-  "name": "mfgames-culture-es6",
-  "version": "0.0.0",
-  "main": "lib/init.js",
-  "devDependencies": {
-    "jasmine": "0.0.18",
-    "mfgames-culture-data": "^0.0.0",
-    "mocha": "^2.3.3"
-  },
-  "scripts": {
-    "test": "jasmine lib/spec/*-spec.js",
-    "build": "npm run build:amd && npm run build:commonjs"
-  },
-  "dependencies": {
-    "babel-core": "^6.1.4",
-    "typescript": "^1.6.2"
-  },
-  "typings": "./index.d.ts"
+	"name": "mfgames-culture-javascript",
+	"version": "0.0.0",
+	"description": "A library for handling arbitrary cultures and calendars for fantasy and sci-fi.",
+	"license": "MIT",
+	"author": {
+        "name": "Dylan R. E. Moonfire",
+        "email": "d.moonfire@mfgames.com",
+        "url": "https://d.moonfire.us"
+    },
+	"keywords": ["fantasy", "sci-fi", "calendar"],
+	"scripts": {
+		"lint": "tslint src/*.ts",
+		"pretest": "npm run build",
+		"test": "jasmine lib/spec/*-spec.js",
+		"prebuild": "npm run lint",
+		"build": "tsc -p src"
+	},
+	"main": "lib/init.js",
+    "homepage": "https://mfgames.com/mfgames-culture",
+	"repository":
+	{
+		"type": "git",
+		"url": "https://github.com/dmoonfire/mfgames-culture-javascript"
+	},
+	"bugs":
+	{
+		"url": "https://github.com/dmoonfire/mfgames-culture-javascript/issues"
+	},
+	"devDependencies":
+	{
+		"jasmine": "^2.3.2",
+		"mfgames-culture-data": "^0.0.0",
+		"mocha": "^2.3.3",
+		"typescript": "^1.6.2"
+	},
+	"typings": "./index.d.ts"
 }
