@@ -19,7 +19,7 @@ describe("round trip formatting", function() {
             function(error) { done(error); });
     });
 
-    xit("2015-01-02 13:14:14", function(done) {
+    it("2015-01-02 13:14:14", function(done) {
         getCulture("nonfiction/en-US").then(
             function(culture: Culture) {
                 try {
@@ -34,7 +34,7 @@ describe("round trip formatting", function() {
             function(error) { done(error); });
     });
 
-    xit("2015-01-02 13:14:13", function(done) {
+    it("2015-01-02 13:14:13", function(done) {
         getCulture("nonfiction/en-US").then(
             function(culture: Culture) {
                 try {
@@ -49,7 +49,7 @@ describe("round trip formatting", function() {
             function(error) { done(error); });
     });
 
-    xit("2015-01-02 13:14:12", function(done) {
+    it("2015-01-02 13:14:12", function(done) {
         getCulture("nonfiction/en-US").then(
             function(culture: Culture) {
                 try {
@@ -64,7 +64,7 @@ describe("round trip formatting", function() {
             function(error) { done(error); });
     });
 
-    xit("2015-01-02 13:14:11", function(done) {
+    it("2015-01-02 13:14:11", function(done) {
         getCulture("nonfiction/en-US").then(
             function(culture: Culture) {
                 try {
