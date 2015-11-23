@@ -85,15 +85,15 @@ export class Calendar {
     public getInstant(input: number|string|BigJsLibrary.BigJS): any {
         // Normalize the Julian date to milliseconds because it is easier to
         // handle base-12 and base-3 elements from there.
-        var ms = toMilliseconds(input);
+        var ms = toBig(input);
 
         // Set up the default instant. We use the toJulianDate instead of the
         // input directly to ensure we are converting exactly what we intend.
-        var instant = { julian: toJulianDate(ms) };
+        var instant = { julian: Number(ms) };
 
         // If we have an offset, modify the date by it.
         if (this.data.julian) {
-            ms = ms.plus(toMilliseconds(this.data.julian));
+            ms = ms.plus(toBig(this.data.julian));
         }
 
         // Go through each of the cycles and calculate each one. We will reset
@@ -108,10 +108,15 @@ export class Calendar {
     }
 
     public getJulian(instant: any): number {
+        var bigJulian = this.getBigJulian(instant);
+        return Number(bigJulian);
+    }
+
+    public getBigJulian(instant: any): BigJsLibrary.BigJS {
         // Loop through the top-level cycles and see if any of these will work.
         // If they do, calculate the Julian Date. At the moment, we include all
         // of the root elements which will handle composite calendars.
-        var ms = toMilliseconds(-this.data.julian);
+        var ms = toBig(-this.data.julian);
         var working = {};
 
         for (var cycle of this.data.cycles) {
@@ -120,7 +125,7 @@ export class Calendar {
         }
 
         // Return the resulting julian.
-        return toJulianDate(ms);
+        return ms;
     }
 
     private getCycleJulian(instant: any, cycle: CalendarCycleData, working: any): BigJsLibrary.BigJS {
@@ -355,7 +360,7 @@ export class Calendar {
                 }
 
                 //console.log("single", "found", singleRef, singleValue);
-                return toMilliseconds(single.julian);
+                return toBig(single.julian);
             }
         }
 
@@ -378,7 +383,7 @@ export class Calendar {
         }
 
         // We have a valid value, so return the results.
-        return toMilliseconds(length.julian);
+        return toBig(length.julian);
     }
 }
 
@@ -512,12 +517,10 @@ export class Culture {
             instant[ref] = cycleIndex;
         }
 
-console.log("a5");
         // This is a partial instant, so convert it to Julian and then back into
         // a fully populated object.
-        var julian = this.calendar.getJulian(instant);
+        var julian = this.calendar.getBigJulian(instant);
         var populatedInstant = this.calendar.getInstant(julian);
-        console.log("a2");
         return populatedInstant;
     }
 
@@ -776,15 +779,15 @@ export class ArrayCultureDataProvider implements CultureDataProvider {
     }
 }
 
-function toMilliseconds(input: number|string|BigJsLibrary.BigJS): BigJsLibrary.BigJS {
+function toBig(input: number|string|BigJsLibrary.BigJS): BigJsLibrary.BigJS {
     switch (typeof (input)) {
         case "number":
             var numberInput = <number> input;
-            var numberMs = Big(numberInput).times(millisecondsInDay);
+            var numberMs = Big(numberInput);
             return numberMs;
         case "string":
             var stringInput = <string> input;
-            var stringMs = Big(stringInput).times(millisecondsInDay);
+            var stringMs = Big(stringInput);
             return stringMs;
 
         default:
@@ -792,10 +795,6 @@ function toMilliseconds(input: number|string|BigJsLibrary.BigJS): BigJsLibrary.B
     }
 }
 
-function toJulianDate(input: BigJsLibrary.BigJS): number {
-    return parseFloat(input.div(millisecondsInDay).toPrecision(8));
-}
-
 function getPartialDays(input: BigJsLibrary.BigJS): BigJsLibrary.BigJS {
-    return input.mod(millisecondsInDay);
+    return input.mod(1);
 }
