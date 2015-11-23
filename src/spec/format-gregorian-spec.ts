@@ -12,17 +12,12 @@ describe("gregorian format", function() {
                     var calendar = culture.calendar;
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "INVALID");
-                    fail("Incorrectly formatted a date as INVALID.")
-                } catch (err) {
-                    // No handling since we are testing it blowing up.
-                } finally {
+                    done(new Error("Incorrectly formatted a date as INVALID."));
+                } catch (exception) {
                     done();
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can format 2001-01-01 as MM/DD/YYYY", function(done) {
@@ -36,16 +31,12 @@ describe("gregorian format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MM/DD/YYYY");
                     expect(formattedInstant).toEqual("01/01/2001");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can format 2001-01-01 as MMM DD, YY", function(done) {
@@ -59,15 +50,11 @@ describe("gregorian format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MMM DD, YY");
                     expect(formattedInstant).toEqual("Jan 01, 01");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 });

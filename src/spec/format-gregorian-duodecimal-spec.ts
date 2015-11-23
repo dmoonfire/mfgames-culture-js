@@ -15,16 +15,12 @@ describe("gregorian/decimal format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "YYYY-MM-DD HH:mm:ss");
                     expect(formattedInstant).toEqual("2001-01-01 00:00:00");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can format 2001-01-01 01:02:03 as YYYY-MM-DD HH:mm:ss", function(done) {
@@ -38,16 +34,12 @@ describe("gregorian/decimal format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "YYYY-MM-DD HH:mm:ss");
                     expect(formattedInstant).toEqual("2001-01-01 01:02:03");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
 
@@ -62,16 +54,12 @@ describe("gregorian/decimal format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "YYYY-MM-DD HH:mm:ss");
                     expect(formattedInstant).toEqual("2001-01-01 13:12:14");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can format 2001-01-01 13:12:14 as MM/DD/YYYY h:mm:ss tt", function(done) {
@@ -85,15 +73,11 @@ describe("gregorian/decimal format", function() {
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MM/DD/YYYY h:mm:ss tt");
                     expect(formattedInstant).toEqual("01/01/2001 1:12:14 pm");
-                } catch (err) {
-                    fail(err);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 });

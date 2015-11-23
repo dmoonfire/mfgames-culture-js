@@ -24,16 +24,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 0,
                         monthDay: 0
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2001-01-02", function(done) {
@@ -56,16 +52,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 0,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2001-02-01", function(done) {
@@ -88,16 +80,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 1,
                         monthDay: 0
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2001-02-02", function(done) {
@@ -120,16 +108,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 1,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2001-03-02", function(done) {
@@ -152,16 +136,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2002-02-02", function(done) {
@@ -184,16 +164,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 1,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2002-03-02", function(done) {
@@ -216,16 +192,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2003-02-02", function(done) {
@@ -248,16 +220,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 1,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2003-03-02", function(done) {
@@ -280,16 +248,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2004-02-02", function(done) {
@@ -312,16 +276,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 1,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2004-03-02", function(done) {
@@ -344,16 +304,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2100-03-02", function(done) {
@@ -376,16 +332,12 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 
     it("can get components for 2101-03-02", function(done) {
@@ -408,15 +360,11 @@ describe("gregorian calendar", function() {
                         yearMonth: 2,
                         monthDay: 1
                     });
-                } catch (exception) {
-                    fail(exception);
-                } finally {
                     done();
+                } catch (exception) {
+                    done(exception);
                 }
             },
-            function(error) {
-                fail("There was an error while running: " + error);
-                done();
-            });
+            function(error) { done(error); });
     });
 });

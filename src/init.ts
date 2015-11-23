@@ -1,5 +1,9 @@
 /// <reference path="../typings/es6-promise/es6-promise.d.ts"/>
+/// <reference path="../typings/big.js/big.js.d.ts"/>
 import { Promise } from "es6-promise";
+import Big = require("big.js");
+
+var millisecondsInDay = 86400000;
 
 export interface CalendarCalculationData {
     div?: number;
@@ -77,21 +81,25 @@ export class Calendar {
 
     public data: CalendarData;
 
-    public getInstant(julianDate: number): any {
-        // Normalize the Julian to seven digits.
-        julianDate = Number(julianDate.toFixed(8));
+    public getInstant(input: Big|string|Big): any {
+        // Normalize the Julian date to milliseconds because it is easier to
+        // handle base-12 and base-3 elements from there.
+        var ms = toMilliseconds(input);
 
-        // Set up the default instant.
-        var instant = { julian: julianDate };
+        // Set up the default instant. We use the toJulianDate instead of the
+        // input directly to ensure we are converting exactly what we intend.
+        var instant = { julian: toJulianDate(ms) };
 
         // If we have an offset, modify the date by it.
-        if (this.data.julian) { julianDate += this.data.julian; }
+        if (this.data.julian) {
+            ms = ms.add(toMilliseconds(this.data.julian));
+        }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
         // independently.
         for (var cycle of this.data.cycles) {
-            this.calculateCycle(cycle, julianDate, instant);
+            this.calculateCycle(cycle, ms, instant);
         }
 
         // Return the resulting calendar instant.
@@ -102,35 +110,36 @@ export class Calendar {
         // Loop through the top-level cycles and see if any of these will work.
         // If they do, calculate the Julian Date. At the moment, we include all
         // of the root elements which will handle composite calendars.
-        var julian: number = -this.data.julian;
+        var ms = toMilliseconds(-this.data.julian);
         var working = {};
 
         for (var cycle of this.data.cycles) {
-            var cycleJulian = this.getCycleJulian(instant, cycle, working);
-            julian += cycleJulian;
+            var cycleMs = this.getCycleJulian(instant, cycle, working);
+            ms = ms.add(cycleMs);
         }
 
         // Return the resulting julian.
-        return julian;
+        return toJulianDate(ms);
     }
 
-    private getCycleJulian(instant: any, cycle: CalendarCycleData, working: any): number {
+    private getCycleJulian(instant: any, cycle: CalendarCycleData, working: any): Big {
         // If we don't have the index for the cycle, then skip it.
+        var ms: Big = Big(0);
+
         if (!(cycle.id in instant)) {
-            return 0;
+            return ms;
         }
 
         // Figure out the type of cycle, since that will determine how we
         // calcualte it.
-        var julian = 0;
         var index = instant[cycle.id];
 
         switch (cycle.type) {
             case "repeat":
-                julian = this.getRepeatCycleJulian(instant, cycle, working);
+                ms = this.getRepeatCycleJulian(instant, cycle, working);
                 break;
             case "sequence":
-                julian = this.getSequenceCycleJulian(instant, cycle, working);
+                ms = this.getSequenceCycleJulian(instant, cycle, working);
                 break;
             default: throw new Error("Cannot process unknown cycle type: " + cycle.type + ".");
         }
@@ -138,18 +147,19 @@ export class Calendar {
         // Once we go through this, then go through the child cycles.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                julian += this.getCycleJulian(instant, child, working);
+                var childMs = this.getCycleJulian(instant, child, working);
+                ms = ms.add(childMs);
             }
         }
 
         // Pull out the index and calculate the values.
-        return julian;
+        return ms;
     }
 
     private getRepeatCycleJulian(instant: any, cycle: CalendarCycleData, working: any): number {
         // Start with the base cycle and zero out the index of the working set.
         var index = instant[cycle.id];
-        var julian = 0;
+        var ms = Big(0);
         working[cycle.id] = 0;
 
         // Loop through the types, processing each one until we run out.
@@ -168,7 +178,7 @@ export class Calendar {
                 if (next <= 0) { continue; }
 
                 working[cycle.id] += length.count;
-                julian += next;
+                ms = ms.add(next);
                 found = true;
                 break;
             }
@@ -178,13 +188,13 @@ export class Calendar {
         }
 
         // Return the resulting Julian date.
-        return julian;
+        return ms;
     }
 
     private getSequenceCycleJulian(instant: any, cycle: CalendarCycleData, working: any): number {
         // Start with the base cycle and zero out the index of the working set.
         var index = instant[cycle.id];
-        var julian = 0;
+        var ms = Big(0);
         working[cycle.id] = 0;
 
         // Loop through the sequence lengths until we exceed our limit.
@@ -196,36 +206,38 @@ export class Calendar {
             var length = cycle.lengths[cycleIndex];
             var next = this.calculateLength(length, instant);
 
-            julian += next;
+            ms = ms.add(next);
         }
 
         // Return the resulting Julian date.
-        return julian;
+        return ms;
     }
 
-    private calculateCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
+    private calculateCycle(cycle: CalendarCycleData, ms: Big, instant: any): void {
         // Check to see if we are only dealing with days.
-        if (cycle.partialDaysOnly) { julianDate -= Math.floor(julianDate); }
+        if (cycle.partialDaysOnly) {
+            ms = getPartialDays(ms);
+        }
 
         // Figure out what to do based on the type of the cycle.
         switch (cycle.type) {
             case "repeat":
-                this.calculateRepeatCycle(cycle, julianDate, instant);
+                this.calculateRepeatCycle(cycle, ms, instant);
                 break;
 
             case "calculate":
-                this.calculateCalculateCycle(cycle, julianDate, instant);
+                this.calculateCalculateCycle(cycle, ms, instant);
                 break;
 
             case "sequence":
-                this.calculateSequenceCycle(cycle, julianDate, instant);
+                this.calculateSequenceCycle(cycle, ms, instant);
                 break;
 
             default: throw "Cannot handle cycle type of " + cycle.type + ".";
         }
     }
 
-    private calculateCalculateCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
+    private calculateCalculateCycle(cycle: CalendarCycleData, ms: Big, instant: any): void {
         var ref = cycle.ref;
         var index = instant[ref];
         var value = cycle.value;
@@ -238,33 +250,31 @@ export class Calendar {
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, instant);
+                this.calculateCycle(child, ms, instant);
             }
         }
     }
 
-    private calculateRepeatCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
+    private calculateRepeatCycle(cycle: CalendarCycleData, ms: Big, instant: any): void {
         // Start with the zero index.
         instant[cycle.id] = 0;
 
         // Loop through the various lengths until we encounter a length that
         // exceeds the remaining Julian Date.
-        var next = 0;
-
-        while (julianDate >= 0) {
+        while (ms.gt(0)) {
             // Calculate the length of the next cycle by finding the next one.
             var found = false;
 
             for (var length of cycle.lengths) {
                 // Calculate the length of this length. If this is less than or
                 // equal to the Julian Date, we need to keep it.
-                next = this.calculateLength(length, instant);
+                var next = this.calculateLength(length, instant);
 
                 if (next <= 0) { continue; }
 
-                if (next <= julianDate) {
+                if (next.le(ms)) {
                     instant[cycle.id] += length.count;
-                    julianDate -= next;
+                    ms = ms.minus(next);
                     found = true;
                     break;
                 }
@@ -277,12 +287,12 @@ export class Calendar {
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, instant);
+                this.calculateCycle(child, ms, instant);
             }
         }
     }
 
-    private calculateSequenceCycle(cycle: CalendarCycleData, julianDate: number, instant: any): void {
+    private calculateSequenceCycle(cycle: CalendarCycleData, ms: Big, instant: any): void {
         // Start with the zero index.
         instant[cycle.id] = 0;
 
@@ -298,14 +308,14 @@ export class Calendar {
 
             //console.log("seq", cycle.id, "next", julianDate, next);
 
-            if (next <= 0 || next > julianDate) { break; }
+            if (next <= 0 || next.gt(ms)) { break; }
 
             // Adjust the instant cycle index and move to the next.
             instant[cycle.id]++;
-            julianDate -= next;
+            ms = ms.minus(next);
 
             // If we hit zero, we're done.
-            if (julianDate <= 0) { break; }
+            if (ms.le(0)) { break; }
         }
 
         //console.log("seq", cycle.id, "end", julianDate, instant[cycle.id]);
@@ -313,19 +323,18 @@ export class Calendar {
         // If we have additional cycles, we want to calculate them recursively.
         if (cycle.cycles) {
             for (var child of cycle.cycles) {
-                this.calculateCycle(child, julianDate, instant);
+                this.calculateCycle(child, ms, instant);
             }
         }
     }
 
-    private calculateLength(length: CalendarLengthData, instant: any): number {
+    private calculateLength(length: CalendarLengthData, instant: any): Big {
         // See if we have "single", which means a choice between multiple
         // lengths.
         if (length.single) {
             // Loop through the single lengths until we find one that is
             // applicable.
             //console.log("single", "begin");
-
             for (var single of length.single) {
                 var singleRef = single.ref;
                 var singleIndex = instant[singleRef];
@@ -345,7 +354,7 @@ export class Calendar {
                 }
 
                 //console.log("single", "found", singleRef, singleValue);
-                return single.julian;
+                return toMilliseconds(single.julian);
             }
         }
 
@@ -368,7 +377,7 @@ export class Calendar {
         }
 
         // We have a valid value, so return the results.
-        return length.julian;
+        return toMilliseconds(length.julian);
     }
 }
 
@@ -454,7 +463,7 @@ export class Culture {
 
             // If we didn't find it, see if this could be a JDN.
             if (!found && this.isNumeric(input)) {
-                var julian = parseFloat(input);
+                var julian = Big(input);
                 var populatedInstant = this.calendar.getInstant(julian);
                 return populatedInstant;
             }
@@ -486,7 +495,6 @@ export class Culture {
             // If we have a default, then set the cycles.
             if (elem.default) {
                 for (var key in elem.default) {
-                    console.log("aa", key, elem.default[key]);
                     instant[key] = elem.default[key];
                 }
 
@@ -503,10 +511,12 @@ export class Culture {
             instant[ref] = cycleIndex;
         }
 
+console.log("a5");
         // This is a partial instant, so convert it to Julian and then back into
         // a fully populated object.
         var julian = this.calendar.getJulian(instant);
         var populatedInstant = this.calendar.getInstant(julian);
+        console.log("a2");
         return populatedInstant;
     }
 
@@ -763,4 +773,24 @@ export class ArrayCultureDataProvider implements CultureDataProvider {
 
         throw new Error("Cannot find component ID: " + component + ".");
     }
+}
+
+function toMilliseconds(input: number|string|Big): Big {
+    switch (typeof (input)) {
+        case "number":
+        case "string":
+            var ms = Big(input).times(millisecondsInDay);
+            return ms;
+
+        default:
+            return input;
+    }
+}
+
+function toJulianDate(input: Big): number {
+    return input.div(millisecondsInDay).toPrecision(8);
+}
+
+function getPartialDays(input: Big): Big {
+    return input.mod(millisecondsInDay);
 }
