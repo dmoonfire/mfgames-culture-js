@@ -32,15 +32,12 @@
   "devDependencies": {
     "jasmine-node": "^1.14.5",
     "mfgames-culture-data": "^0.0.0",
-    "mocha": "^2.3.3",
+    "tslint": "^3.0.0",
     "typescript": "^1.6.2"
   },
   "dependencies": {
     "big.js": "^3.1.3",
-    "bigdecimal": "^0.6.1",
-    "bignumber.js": "^2.1.0",
-    "es6-promise": "^3.0.2",
-    "mathjs": "^2.4.2"
+    "es6-promise": "^3.0.2"
   },
   "typings": "./index.d.ts"
 }
