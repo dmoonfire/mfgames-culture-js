@@ -1,10 +1,10 @@
 /// <reference path="../typings/es6-promise/es6-promise.d.ts"/>
 /// <reference path="../typings/big.js/big.js.d.ts"/>
-/// <amd-dependency path="big.js"/>
 import { Promise } from "es6-promise";
+import Big = require("big.js");
 
 var millisecondsInDay = 86400000;
-var Big = require("big.js");
+//var Big = require("big.js");
 
 export interface CalendarCalculationData {
     div?: number;
