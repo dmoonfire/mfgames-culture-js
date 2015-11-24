@@ -52,7 +52,6 @@ export interface CultureTemporalFormatElementData {
     maxValue?: number;
     minValue?: number;
     parseRef?: string;
-    parseOffset?: number;
 }
 export interface CultureTemporalData {
     calendars: Array<string>;
@@ -533,18 +532,18 @@ export class Culture {
                 for (var key in elem.default) {
                     instant[key] = elem.default[key];
                 }
-
-                continue;
             }
 
             // Pull out the elements and reverse the value.
             var ref = elem.parseRef ? elem.parseRef : elem.ref;
-            var value = matches[matchIndex++];
-            var cycleIndex = this.getCycleIndex(elem, value);
 
-            if (elem.parseOffset) { cycleIndex += elem.parseOffset; }
-
-            instant[ref] = cycleIndex;
+            if (ref) {
+                // Get the value and then add it to any existing value.
+                var value = matches[matchIndex++];
+                var cycleIndex = this.getCycleIndex(elem, value);
+                if (!(ref in instant)) { instant[ref] = 0; }
+                instant[ref] += cycleIndex;
+            }
         }
 
         // This is a partial instant, so convert it to Julian and then back into
@@ -597,11 +596,6 @@ export class Culture {
                     .replace("\\", "\\\\")
                     .replace("/", "\\/")
                     .replace(".", "\\.");
-                continue;
-            }
-
-            // If we have defaults, just skip them.
-            if (element.default) {
                 continue;
             }
 
