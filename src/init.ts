@@ -78,9 +78,11 @@ export interface CultureDataProvider {
 export class Calendar {
     constructor(data: CalendarData) {
         this.data = data;
+        this._bigCache = {};
     }
 
     public data: CalendarData;
+    private _bigCache: {[key: string]: BigJsLibrary.BigJS};
 
     public getInstant(input: number|string|BigJsLibrary.BigJS): any {
         // Normalize the Julian date to milliseconds because it is easier to
@@ -93,7 +95,7 @@ export class Calendar {
 
         // If we have an offset, modify the date by it.
         if (this.data.julian) {
-            julian = julian.plus(toBig(this.data.julian));
+            julian = julian.plus(this.getCachedBig("_offset", this.data.julian));
         }
 
         // Go through each of the cycles and calculate each one. We will reset
@@ -116,7 +118,7 @@ export class Calendar {
         // Loop through the top-level cycles and see if any of these will work.
         // If they do, calculate the Julian Date. At the moment, we include all
         // of the root elements which will handle composite calendars.
-        var julian = toBig(-this.data.julian);
+        var julian = this.getCachedBig("_negativeOffset", -this.data.julian);
         var working = {};
 
         for (var cycle of this.data.cycles) {
@@ -173,13 +175,17 @@ export class Calendar {
             // Calculate the length of the next cycle by finding the next one.
             var found = false;
 
-            for (var length of cycle.lengths) {
+            for (var lengthIndex in cycle.lengths) {
                 // If this cycle would have put us over, skip it.
+                var length = cycle.lengths[lengthIndex];
                 if (length.count + working[cycle.id] > index) { continue; }
 
                 // Calculate the length of this length. If this is less than or
                 // equal to the Julian Date, we need to keep it.
-                var next = this.calculateLength(length, working);
+                var next = this.calculateLength(
+                    cycle.id + "/" + lengthIndex,
+                    length,
+                    working);
 
                 if (next.lte(0)) { continue; }
 
@@ -210,7 +216,10 @@ export class Calendar {
 
             // Calculate the length of this sequence.
             var length = cycle.lengths[cycleIndex];
-            var next = this.calculateLength(length, instant);
+            var next = this.calculateLength(
+                cycle.id + "/" + cycleIndex,
+                length,
+                instant);
 
             julian = julian.plus(next);
         }
@@ -271,10 +280,14 @@ export class Calendar {
             // Calculate the length of the next cycle by finding the next one.
             var found = false;
 
-            for (var length of cycle.lengths) {
+            for (var lengthIndex in cycle.lengths) {
                 // Calculate the length of this length. If this is less than or
                 // equal to the Julian Date, we need to keep it.
-                var next = this.calculateLength(length, instant);
+                var length = cycle.lengths[lengthIndex];
+                var next = this.calculateLength(
+                    cycle.id + "/" + lengthIndex,
+                    length,
+                    instant);
 
                 if (next.lte(0)) { continue; }
 
@@ -307,13 +320,16 @@ export class Calendar {
         // Loop through the sequences until we exceed our limit.
         var found = false;
 
-        for (var length of cycle.lengths) {
+        for (var lengthIndex in cycle.lengths) {
             // Calculate the length of this length. If this is less than or
             // equal to the Julian Date, we need to keep it and move to the next.
-            var next = this.calculateLength(length, instant);
+            var length = cycle.lengths[lengthIndex];
+            var next = this.calculateLength(
+                cycle.id + "/" + lengthIndex,
+                length,
+                instant);
 
             //console.log("seq", cycle.id, "next", julianDate, next);
-
             if (next.lte(0) || next.gt(julian)) { break; }
 
             // Adjust the instant cycle index and move to the next.
@@ -334,7 +350,7 @@ export class Calendar {
         }
     }
 
-    private calculateLength(length: CalendarLengthData, instant: any): BigJsLibrary.BigJS {
+    private calculateLength(cacheKey: string, length: CalendarLengthData, instant: any): BigJsLibrary.BigJS {
         // See if we have "single", which means a choice between multiple
         // lengths.
         if (length.single) {
@@ -360,7 +376,7 @@ export class Calendar {
                 }
 
                 //console.log("single", "found", singleRef, singleValue);
-                return toBig(single.julian);
+                return this.getCachedBig(cacheKey, single.julian);
             }
         }
 
@@ -383,7 +399,21 @@ export class Calendar {
         }
 
         // We have a valid value, so return the results.
-        return toBig(length.julian);
+        return this.getCachedBig(cacheKey, length.julian);
+    }
+
+    private getCachedBig(key: string, input: number|string|BigJsLibrary.BigJS): BigJsLibrary.BigJS {
+        // See if we already have the value in the key. We cache the results
+        // since calendar data is not dynamic and these are typically relatively
+        // small in quantity but used heavily.
+        if (key in this._bigCache) {
+            return this._bigCache[key];
+        }
+
+        // Calculate the value, cache it, and return the results.
+        var results = toBig(input);
+        this._bigCache[key] = results;
+        return results;
     }
 }
 

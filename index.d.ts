@@ -1,17 +1,8 @@
 declare module "mfgames-culture-js" {
     export class Calendar {
         constructor(data: CalendarData);
-        private _data;
         getInstant(julianDate: number): any;
         getJulian(instant: any): number;
-        private getCycleJulian(instant, cycle, working);
-        private getRepeatCycleJulian(instant, cycle, working);
-        private getSequenceCycleJulian(instant, cycle, working);
-        private calculateCycle(cycle, julianDate, instant);
-        private calculateCalculateCycle(cycle, julianDate, instant);
-        private calculateRepeatCycle(cycle, julianDate, instant);
-        private calculateSequenceCycle(cycle, julianDate, instant);
-        private calculateLength(length, instant);
     }
     export class Culture {
         constructor(data: CultureData);
@@ -82,11 +73,8 @@ declare module "mfgames-culture-js" {
     }
     export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
         constructor(rootDirectory?: string);
-        private rootDirectory;
         getCalendarData(id: string): Promise<CalendarData>;
         getCultureData(id: string): Promise<CultureData>;
-        private loadCalendarData(id);
-        private loadCultureData(id);
     }
     export class ArrayCultureDataProvider implements CultureDataProvider {
         constructor(components: Array<ComponentData>);
@@ -95,7 +83,6 @@ declare module "mfgames-culture-js" {
     }
     export class CultureProvider {
         constructor(dataProvider: CultureDataProvider);
-        private _dataProvider;
         getCalendarPromise(id: string): Promise<Calendar>;
         getCulturePromise(id: string): Promise<Culture>;
     }
