@@ -27,6 +27,7 @@ export interface CalendarCycleData {
     ref?: string;
     value?: number;
     operation?: string;
+    offset?: number;
     partialDaysOnly?: boolean;
 }
 
@@ -61,7 +62,6 @@ export interface CultureTemporalData {
  * The metadata and top-level information for calendar
  */
 export interface CalendarData extends ComponentData {
-    julian?: number;
     cycles?: Array<CalendarCycleData>;
 }
 
@@ -81,7 +81,7 @@ export class Calendar {
     }
 
     public data: CalendarData;
-    private _bigCache: {[key: string]: BigJsLibrary.BigJS};
+    private _bigCache: { [key: string]: BigJsLibrary.BigJS };
 
     public getInstant(input: number|string|BigJsLibrary.BigJS): any {
         // Normalize the Julian date to milliseconds because it is easier to
@@ -91,11 +91,6 @@ export class Calendar {
         // Set up the default instant. We use the toJulianDate instead of the
         // input directly to ensure we are converting exactly what we intend.
         var instant = { julian: Number(julian) };
-
-        // If we have an offset, modify the date by it.
-        if (this.data.julian) {
-            julian = julian.plus(this.getCachedBig("_offset", this.data.julian));
-        }
 
         // Go through each of the cycles and calculate each one. We will reset
         // the julian date for each one since each of these cycles is calculated
@@ -117,7 +112,7 @@ export class Calendar {
         // Loop through the top-level cycles and see if any of these will work.
         // If they do, calculate the Julian Date. At the moment, we include all
         // of the root elements which will handle composite calendars.
-        var julian = this.getCachedBig("_negativeOffset", -this.data.julian);
+        var julian = Big(0);
         var working = {};
 
         for (var cycle of this.data.cycles) {
@@ -157,6 +152,11 @@ export class Calendar {
                 var childJulian = this.getCycleJulian(instant, child, working);
                 julian = julian.plus(childJulian);
             }
+        }
+
+        // If we have an offset, modify it.
+        if (cycle.offset) {
+            julian = julian.minus(this.getCachedBig(cycle.id + "_offset", cycle.offset));
         }
 
         // Pull out the index and calculate the values.
@@ -228,6 +228,11 @@ export class Calendar {
     }
 
     private calculateCycle(cycle: CalendarCycleData, julian: BigJsLibrary.BigJS, instant: any): void {
+        // If we have an offset, modify the date by it.
+        if (cycle.offset) {
+            julian = julian.plus(this.getCachedBig(cycle.id + "_offset", cycle.offset));
+        }
+
         // Check to see if we are only dealing with days.
         if (cycle.partialDaysOnly) {
             julian = getPartialDays(julian);

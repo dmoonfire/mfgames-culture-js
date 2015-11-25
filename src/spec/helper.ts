@@ -44,7 +44,7 @@ export class NodeFilesystemCultureDataProvider implements CultureDataProvider {
 }
 
 // Set up the basic provider used for all the tests.
-var rootDirectory = path.join(__dirname, "..", "..", "node_modules", "mfgames-culture-data");
+var rootDirectory = path.join(__dirname, "..", "..", "node_modules", "mfgames-culture-data", "dist");
 var dataProvider = new NodeFilesystemCultureDataProvider(rootDirectory);
 var provider = new CultureProvider(dataProvider);
 
