@@ -3,23 +3,71 @@
 import { Promise } from "es6-promise";
 import Big = require("big.js");
 
-var millisecondsInDay = 86400000;
-//var Big = require("big.js");
-
-export interface CalendarCalculationData {
-    div?: number;
-    ref: string;
-    mod?: number;
-}
+/**
+ * Defines the JSON signature for cycle length calculations. This is used by
+ * both the repeat and sequence cycles.
+ *
+ * @interface
+ */
 export interface CalendarLengthData {
+    /**
+     * The amount to adjust a *cycle index* when this length is applied. This
+     * must be a whole number (1 or higher integer).
+     */
     count: number;
+
+    /**
+     * The amount to modify the Julian Day Number when this length is valid for
+     * a cycle calculation. Typically `julian` or `single` is required to
+     * calculate the length of a cycle.
+     */
     julian?: number;
+
+    /**
+     * A series of length elements that have various calculations. Only one
+     * length within the single is selected, the first one that is valid for
+     * the current state.
+     */
     single?: Array<CalendarLengthData>;
+
+    /**
+     * The reference to a calculated cycle id. This is used with the operation
+     * and value properties to determine if this length is valid for the current
+     * state. Only cycles that were already calculated, such as parent cycles
+     * and ones earlier in the sequence, can be referenced.
+     *
+     * This is only required with conditional lengths.
+     */
     ref?: string;
+
+    /**
+     * The operation used to determine if a length is valid. This is used with
+     * ref and value. The only values can be "div" and "mod".
+     *
+     * This is only required with conditional lengths.
+     */
     operation?: string;
+
+    /**
+     * The value used for the operations and ref properties. The value is
+     * determined by the operation, which requires an integer value.
+     *
+     * This is only required with conditional lengths.
+     */
     value?: number;
 }
+
+/**
+ * Defines the JSON data for a calendar cycle.
+ *
+ * @interface
+ */
 export interface CalendarCycleData {
+    /**
+     * The identifier for the cycle. This must be unique not only within a
+     * single calendar but also all other combined calendars used by a given
+     * culture.
+     */
     id: string;
     type: string;
     cycles: Array<CalendarCycleData>;
