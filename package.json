@@ -31,7 +31,7 @@
 	"devDependencies":
 	{
 		"jasmine-node": "^1.14.5",
-		"mfgames-culture-data": "^0.0.0",
+		"mfgames-culture-data": ">=0.0.0",
 		"tslint": "^3.0.0",
 		"typescript": "^1.6.2"
 	},
