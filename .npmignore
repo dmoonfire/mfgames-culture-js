@@ -1,2 +1,11 @@
 *~
+*.tgz
+TODO.markdown
+
+.editorconfig
+.jsbeautifyrc
+
 src/
+lib/spec/
+typings/
+tsd.json
