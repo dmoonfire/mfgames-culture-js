@@ -55,6 +55,12 @@ export interface CalendarLengthData {
      * This is only required with conditional lengths.
      */
     value?: number;
+
+    /**
+     * The value to determine if cycle length calculations should stop looping
+     * if the length returned a valid value.
+     */
+    stopIfValid: boolean;
 }
 
 /**
@@ -341,12 +347,23 @@ export class Calendar {
                     length,
                     instant);
 
+                // If we got a zero, that means this one didn't apply at all.
                 if (next.lte(0)) { continue; }
 
+                // If the Julian days can fit within the amount, then we
+                // use this one and then stop processing.
                 if (next.lte(julian)) {
                     instant[cycle.id] += length.count;
                     julian = julian.minus(next);
                     found = true;
+                    break;
+                }
+
+                // If we are not a fast-forward block, we need to stop processing
+                // since the next element may be less than the current one (if
+                // we have a calendar with fall  days instead of leap days) and
+                // it would be caught by that.
+                if (length.stopIfValid) {
                     break;
                 }
             }
@@ -714,7 +731,6 @@ export class Culture {
         // If we have a prefix or suffix, add them.
         if (elem.prefix) { value = elem.prefix + value; }
         if (elem.suffix) { value = elem.suffix + value; }
-
 
         // If we have a lookup code, then use the resulting value as
         // a lookup.
