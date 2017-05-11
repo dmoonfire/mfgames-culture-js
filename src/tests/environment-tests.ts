@@ -1,4 +1,4 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
+const expect = require("expect");
 
 describe("environment", function() {
     it("verify test framework", function () {

@@ -1,5 +1,4 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
+const expect = require("expect");
 import { getJulian, getCalendar } from "./helper";
 
 describe("julian dates", function() {

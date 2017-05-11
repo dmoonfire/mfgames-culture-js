@@ -1,11 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
-import { Calendar, Culture } from "../init";
+const expect = require("expect");
+import { Calendar, Culture } from "../index";
 import { getJulian, getCalendar, getCulture } from "./helper";
 
 describe("gregorian format", function() {
     it("can't format 2001-01-01 as INVALID", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var julian = getJulian(2001, 1, 1);
@@ -21,12 +20,12 @@ describe("gregorian format", function() {
     });
 
     it("can format 2001-01-01 as MM/DD/YYYY", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var julian = getJulian(2001, 1, 1);
                     var calendar = culture.calendar;
-                    expect(calendar).toBeDefined();
+                    expect(calendar).toExist();
 
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MM/DD/YYYY");
@@ -40,12 +39,12 @@ describe("gregorian format", function() {
     });
 
     it("can format 2001-01-01 as MMM DD, YY", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var julian = getJulian(2001, 1, 1);
                     var calendar = culture.calendar;
-                    expect(calendar).toBeDefined();
+                    expect(calendar).toExist();
 
                     var instant = calendar.getInstant(julian);
                     var formattedInstant = culture.formatInstant(instant, "MMM DD, YY");

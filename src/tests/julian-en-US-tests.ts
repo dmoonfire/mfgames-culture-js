@@ -1,11 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
-import { Calendar, Culture } from "../init";
+const expect = require("expect");
+import { Calendar, Culture } from "../index";
 import { getJulian, getCalendar, getCulture } from "./helper";
 
 describe("get instant from gregorian text", function() {
     it("julian 01/01/2000", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var julian = getJulian(2000, 1, 1);
@@ -22,7 +21,7 @@ describe("get instant from gregorian text", function() {
     });
 
     it("01/01/2000", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var instant = culture.parseInstant("01/01/2000", "MM/DD/YYYY");
@@ -38,7 +37,7 @@ describe("get instant from gregorian text", function() {
     });
 
     it("01/01/2000 unspecified", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var instant = culture.parseInstant("01/01/2000");
@@ -54,7 +53,7 @@ describe("get instant from gregorian text", function() {
     });
 
     it("Feb 03, 12", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var instant = culture.parseInstant("Feb 03, 12", "MMM DD, YY");
@@ -70,7 +69,7 @@ describe("get instant from gregorian text", function() {
     });
 
     it("Feb 03, 12 unspecified", function(done) {
-        getCulture("nonfiction/en-US").then(
+        getCulture("en-US").then(
             function(culture: Culture) {
                 try {
                     var instant = culture.parseInstant("Feb 03, 12");

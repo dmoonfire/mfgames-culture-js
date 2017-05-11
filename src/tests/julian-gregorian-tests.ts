@@ -1,11 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
-import { Calendar } from "../init";
+const expect = require("expect");
+import { Calendar } from "../index";
 import { getJulian, getCalendar } from "./helper";
 
 describe("calculate julian from gregorian", function() {
     it("2000-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2000, yearMonth: 0, monthDay: 0 };
@@ -21,7 +20,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2000-02-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2000, yearMonth: 1, monthDay: 0 };
@@ -37,7 +36,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2000-02-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2000, yearMonth: 1, monthDay: 1 };
@@ -53,7 +52,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2001-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2001, yearMonth: 0, monthDay: 0 };
@@ -69,7 +68,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2002-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2002, yearMonth: 0, monthDay: 0 };
@@ -85,7 +84,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2003-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2003, yearMonth: 0, monthDay: 0 };
@@ -101,7 +100,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2004-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2004, yearMonth: 0, monthDay: 0 };
@@ -117,7 +116,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2100-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2100, yearMonth: 0, monthDay: 0 };
@@ -133,7 +132,7 @@ describe("calculate julian from gregorian", function() {
     });
 
     it("2101-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(calendar: Calendar) {
                 try {
                     var instant = { year: 2101, yearMonth: 0, monthDay: 0 };

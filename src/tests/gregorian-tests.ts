@@ -1,11 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
-import { Calendar } from "../init";
+const expect = require("expect");
+import { Calendar } from "../index";
 import { getJulian, getCalendar } from "./helper";
 
 describe("gregorian calendar", function() {
     it("can get components for 2001-01-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal: Calendar) {
                 try {
                     var julian = getJulian(2001, 1, 1);
@@ -33,7 +32,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2001-01-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2001, 1, 2);
@@ -61,7 +60,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2001-02-01", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2001, 2, 1);
@@ -89,7 +88,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2001-02-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2001, 2, 2);
@@ -117,7 +116,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2001-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2001, 3, 2);
@@ -145,7 +144,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2002-02-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2002, 2, 2);
@@ -173,7 +172,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2002-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2002, 3, 2);
@@ -201,7 +200,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2003-02-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2003, 2, 2);
@@ -229,7 +228,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2003-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2003, 3, 2);
@@ -257,7 +256,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2004-02-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2004, 2, 2);
@@ -285,7 +284,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2004-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2004, 3, 2);
@@ -313,7 +312,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2100-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2100, 3, 2);
@@ -341,7 +340,7 @@ describe("gregorian calendar", function() {
     });
 
     it("can get components for 2101-03-02", function(done) {
-        getCalendar("nonfiction/gregorian").then(
+        getCalendar("gregorian").then(
             function(cal) {
                 try {
                     var julian = getJulian(2101, 3, 2);

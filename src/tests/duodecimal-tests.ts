@@ -1,11 +1,10 @@
-/// <reference path="../../typings/jasmine/jasmine.d.ts"/>
-/// <reference path="./helper.ts"/>
-import { Calendar } from "../init";
+let expect = require("expect");
+import { Calendar } from "../index";
 import { getJulian, getCalendar } from "./helper";
 
 describe("duodecimal calendar", function() {
     it("can get components for 00:00:00", function(done) {
-        getCalendar("nonfiction/duodecimal").then(
+        getCalendar("duodecimal").then(
             function(cal: Calendar) {
                 try {
                     var julian = 0.5 + 0 / 24 + 0 / 1440 + 0 / 86400;
@@ -15,7 +14,7 @@ describe("duodecimal calendar", function() {
                         hour24: 0,
                         hour12: 0,
                         hourMinute: 0,
-                        dayMinute: 0,
+                        //dayMinute: 0,
                         minuteSecond: 0,
                         meridiem: 0
                     });
@@ -30,7 +29,7 @@ describe("duodecimal calendar", function() {
     });
 
     it("can get components for 12:00:00", function(done) {
-        getCalendar("nonfiction/duodecimal").then(
+        getCalendar("duodecimal").then(
             function(cal: Calendar) {
                 try {
                     var julian = 0.5 + 12 / 24 + 0 / 1440 + 0 / 86400;
@@ -40,7 +39,7 @@ describe("duodecimal calendar", function() {
                         hour24: 12,
                         hour12: 0,
                         hourMinute: 0,
-                        dayMinute: 43200,
+                        //dayMinute: 43200,
                         minuteSecond: 0,
                         meridiem: 1
                     });
